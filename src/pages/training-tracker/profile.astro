@@ -1,0 +1,393 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout 
+  title="GymForge | Training Profile"
+  description="Manage your GymForge training profile and track your long-term progress."
+>
+  <section class="px-4 sm:px-8 py-12 max-w-4xl mx-auto w-full">
+    <!-- Breadcrumb -->
+    <a href="/training-tracker" class="inline-flex items-center gap-2 text-gym-muted hover:text-accent-lime transition-colors text-sm mb-8">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Back to Tracker
+    </a>
+
+    <!-- Profile Header -->
+    <div class="glass-panel rounded-3xl p-8 md:p-12 relative overflow-hidden mb-8">
+      <div class="absolute -right-24 -top-24 w-64 h-64 rounded-full bg-accent-lime/5 blur-3xl"></div>
+      
+      <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
+        <!-- Avatar Placeholder -->
+        <div class="w-24 h-24 md:w-32 md:h-32 rounded-3xl bg-accent-lime/10 border border-accent-lime/20 flex items-center justify-center text-accent-lime shadow-[0_0_30px_rgba(163,230,53,0.1)] relative">
+          <svg class="w-12 h-12 md:w-16 md:h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <!-- Mini Rank Badge -->
+          <div id="avatar-rank-badge" class="absolute -bottom-2 -right-2 w-10 h-10 rounded-lg border-2 border-gym-dark flex items-center justify-center text-xs font-bold shadow-lg transform rotate-12">
+            B
+          </div>
+        </div>
+
+        <div class="flex-grow text-center md:text-left">
+          <div class="flex flex-col md:flex-row md:items-center gap-4 mb-2">
+            <h1 class="font-display font-bold text-3xl md:text-5xl text-white tracking-tight" id="profile-username">User</h1>
+            <button id="edit-username-btn" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-gym-border bg-gym-dark/50 text-xs font-semibold text-gym-muted hover:text-accent-lime hover:border-accent-lime/30 transition-all">
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+              Edit Name
+            </button>
+          </div>
+          <p class="text-gym-muted text-sm" id="profile-join-date">Joined --</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Season Rank Card -->
+    <div class="glass-panel rounded-3xl p-8 mb-8 relative overflow-hidden group">
+      <!-- Background Rank Text (Massive) -->
+      <div id="rank-bg-text" class="absolute -right-10 -bottom-10 text-9xl font-display font-black opacity-[0.03] select-none pointer-events-none uppercase italic">Bronze</div>
+      
+      <div class="flex flex-col lg:flex-row gap-10 items-center relative z-10">
+        <!-- Large Rank Icon -->
+        <div class="relative">
+          <div id="rank-glow" class="absolute inset-0 blur-3xl opacity-20 transition-all duration-500"></div>
+          <div id="large-rank-badge" class="w-32 h-32 md:w-40 md:h-40 rounded-[2.5rem] border-4 flex flex-col items-center justify-center shadow-2xl relative bg-gym-dark/80 backdrop-blur-md">
+            <span id="rank-symbol" class="text-5xl md:text-6xl font-display font-black tracking-tighter uppercase italic">B</span>
+            <span id="rank-tier" class="text-[10px] md:text-xs font-mono uppercase tracking-[0.3em] font-bold mt-1">Tier I</span>
+          </div>
+        </div>
+
+        <div class="flex-grow w-full">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+            <div>
+              <span class="text-xs font-mono uppercase tracking-widest text-accent-lime font-bold mb-1 block">Competitive Progression</span>
+              <h2 id="display-rank-name" class="font-display font-black text-4xl md:text-5xl text-white tracking-tighter uppercase italic">Bronze Rank</h2>
+            </div>
+            <div class="text-right">
+              <span class="block text-2xl font-display font-bold text-white" id="xp-display">0 / 500 XP</span>
+              <span class="text-xs font-mono text-gym-muted" id="next-rank-msg">Next: Silver</span>
+            </div>
+          </div>
+
+          <!-- Progress Bar Container -->
+          <div class="space-y-3">
+            <div class="h-4 w-full bg-gym-dark/50 rounded-full border border-gym-border overflow-hidden p-0.5">
+              <div id="rank-progress-bar" class="h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(163,230,53,0.3)]" style="width: 0%"></div>
+            </div>
+            <div class="flex justify-between text-[10px] font-mono text-gym-muted uppercase tracking-wider">
+              <span id="current-rank-label">Bronze</span>
+              <span id="next-rank-label">Silver</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+      <div class="glass-panel rounded-2xl p-6 text-center">
+        <span class="block text-xs font-mono uppercase tracking-widest text-gym-muted mb-2">Current Split</span>
+        <span class="text-lg font-bold text-white" id="stat-split">--</span>
+      </div>
+      <div class="glass-panel rounded-2xl p-6 text-center">
+        <span class="block text-xs font-mono uppercase tracking-widest text-gym-muted mb-2">Current Streak</span>
+        <span class="text-2xl font-display font-extrabold text-accent-lime" id="stat-current-streak">0</span>
+      </div>
+      <div class="glass-panel rounded-2xl p-6 text-center">
+        <span class="block text-xs font-mono uppercase tracking-widest text-gym-muted mb-2">Best Streak</span>
+        <span class="text-2xl font-display font-extrabold text-white" id="stat-best-streak">0</span>
+      </div>
+      <div class="glass-panel rounded-2xl p-6 text-center">
+        <span class="block text-xs font-mono uppercase tracking-widest text-gym-muted mb-2">Total Workouts</span>
+        <span class="text-2xl font-display font-extrabold text-white" id="stat-total-workouts">0</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex justify-center">
+      <button 
+        id="reset-profile-btn"
+        class="flex items-center gap-2 px-6 py-3 rounded-xl border border-red-500/20 bg-red-500/5 text-red-400 hover:bg-red-500/10 hover:border-red-500/40 transition-all text-sm font-semibold"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+        Reset All Profile Data
+      </button>
+    </div>
+  </section>
+
+  <!-- Edit Username Modal -->
+  <div id="edit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gym-dark/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+    <div class="glass-panel rounded-3xl p-8 max-w-md w-full shadow-2xl border-accent-lime/20 scale-95 transition-transform duration-300" id="modal-content">
+      <h2 class="font-display font-bold text-2xl text-white mb-6">Edit Profile Name</h2>
+      <div class="space-y-4">
+        <div>
+          <label for="username-input" class="block text-xs font-mono uppercase tracking-widest text-gym-muted mb-2">Display Name</label>
+          <input 
+            type="text" 
+            id="username-input" 
+            placeholder="Enter your name" 
+            class="w-full bg-gym-dark border border-gym-border rounded-xl px-4 py-3 text-white focus:border-accent-lime/50 focus:outline-none transition-colors"
+          />
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button id="cancel-edit-btn" class="flex-1 px-4 py-3 rounded-xl border border-gym-border text-gym-muted hover:text-white transition-colors text-sm font-semibold">Cancel</button>
+          <button id="save-username-btn" class="flex-1 px-4 py-3 rounded-xl bg-accent-lime text-gym-dark hover:bg-accent-lime-hover transition-colors text-sm font-semibold">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    // State
+    let state = {
+      splitType: 'none',
+      customSchedule: {},
+      logs: [],
+      xp: 0,
+      profile: {
+        username: 'Aesthetic Lifter',
+        joinDate: new Date().toISOString()
+      }
+    };
+
+    const RANKS = [
+      { name: 'Bronze', minXp: 0, color: '#a1a1aa', symbol: 'B' },
+      { name: 'Silver', minXp: 500, color: '#e4e4e7', symbol: 'S' },
+      { name: 'Gold', minXp: 1500, color: '#fbbf24', symbol: 'G' },
+      { name: 'Platinum', minXp: 3000, color: '#22d3ee', symbol: 'P' },
+      { name: 'Diamond', minXp: 5000, color: '#3b82f6', symbol: 'D' },
+      { name: 'Crown', minXp: 8000, color: '#a855f7', symbol: 'C' },
+      { name: 'Ace', minXp: 12000, color: '#ef4444', symbol: 'A' },
+      { name: 'Conqueror', minXp: 17000, color: '#f97316', symbol: 'Q' },
+      { name: 'Legend', minXp: 23000, color: '#a3e635', symbol: 'L' }
+    ];
+
+    // DOM Elements
+    const usernameDisplay = document.getElementById('profile-username');
+    const joinDateDisplay = document.getElementById('profile-join-date');
+    const splitStat = document.getElementById('stat-split');
+    const currentStreakStat = document.getElementById('stat-current-streak');
+    const bestStreakStat = document.getElementById('stat-best-streak');
+    const totalWorkoutsStat = document.getElementById('stat-total-workouts');
+    
+    const editBtn = document.getElementById('edit-username-btn');
+    const resetBtn = document.getElementById('reset-profile-btn');
+    const editModal = document.getElementById('edit-modal');
+    const modalContent = document.getElementById('modal-content');
+    const usernameInput = document.getElementById('username-input');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const saveUsernameBtn = document.getElementById('save-username-btn');
+
+    // Rank Elements
+    const avatarRankBadge = document.getElementById('avatar-rank-badge');
+    const rankBgText = document.getElementById('rank-bg-text');
+    const rankGlow = document.getElementById('rank-glow');
+    const largeRankBadge = document.getElementById('large-rank-badge');
+    const rankSymbol = document.getElementById('rank-symbol');
+    const rankTier = document.getElementById('rank-tier');
+    const displayRankName = document.getElementById('display-rank-name');
+    const xpDisplay = document.getElementById('xp-display');
+    const nextRankMsg = document.getElementById('next-rank-msg');
+    const rankProgressBar = document.getElementById('rank-progress-bar');
+    const currentRankLabel = document.getElementById('current-rank-label');
+    const nextRankLabel = document.getElementById('next-rank-label');
+
+    const PRESETS = {
+      bro: 'Bro Split',
+      ppl: 'Push Pull Legs',
+      ul: 'Upper Lower',
+      fb: 'Full Body',
+      custom: 'Custom Split'
+    };
+
+    function init() {
+      const saved = localStorage.getItem('gymforge_training_tracker');
+      if (saved) {
+        state = JSON.parse(saved);
+        if (state.xp === undefined) state.xp = 0;
+        if (!state.profile) {
+          state.profile = {
+            username: 'Aesthetic Lifter',
+            joinDate: new Date().toISOString()
+          };
+          save();
+        }
+      } else {
+        // Initialize default state if nothing exists
+        state.profile = {
+          username: 'Aesthetic Lifter',
+          joinDate: new Date().toISOString()
+        };
+        save();
+      }
+
+      updateUI();
+      attachEventListeners();
+    }
+
+    function save() {
+      localStorage.setItem('gymforge_training_tracker', JSON.stringify(state));
+    }
+
+    function getRank(xp) {
+      for (let i = RANKS.length - 1; i >= 0; i--) {
+        if (xp >= RANKS[i].minXp) return { ...RANKS[i], index: i };
+      }
+      return { ...RANKS[0], index: 0 };
+    }
+
+    function updateUI() {
+      usernameDisplay.textContent = state.profile.username;
+      
+      const joinDate = new Date(state.profile.joinDate);
+      joinDateDisplay.textContent = `Joined ${joinDate.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}`;
+      
+      splitStat.textContent = PRESETS[state.splitType] || 'None';
+      totalWorkoutsStat.textContent = state.logs.length;
+      
+      calculateStreaks();
+      updateRankUI();
+    }
+
+    function updateRankUI() {
+      const currentRank = getRank(state.xp);
+      const nextRank = RANKS[currentRank.index + 1] || null;
+      
+      // Update Avatar Badge
+      avatarRankBadge.textContent = currentRank.symbol;
+      avatarRankBadge.style.backgroundColor = currentRank.color;
+      avatarRankBadge.style.color = currentRank.index > 0 ? '#000' : '#fff';
+
+      // Update Large Card
+      rankBgText.textContent = currentRank.name;
+      rankGlow.style.backgroundColor = currentRank.color;
+      largeRankBadge.style.borderColor = currentRank.color;
+      largeRankBadge.style.boxShadow = `0 0 30px ${currentRank.color}33`;
+      rankSymbol.textContent = currentRank.symbol;
+      rankSymbol.style.color = currentRank.color;
+      rankTier.style.color = currentRank.color;
+      displayRankName.textContent = `${currentRank.name} Rank`;
+      displayRankName.style.color = currentRank.color;
+
+      currentRankLabel.textContent = currentRank.name;
+      
+      if (nextRank) {
+        const xpRequired = nextRank.minXp - currentRank.minXp;
+        const xpCurrent = state.xp - currentRank.minXp;
+        const percent = Math.min(100, Math.max(0, (xpCurrent / xpRequired) * 100));
+        
+        xpDisplay.textContent = `${state.xp} / ${nextRank.minXp} XP`;
+        nextRankMsg.textContent = `Next: ${nextRank.name}`;
+        nextRankLabel.textContent = nextRank.name;
+        
+        rankProgressBar.style.width = `${percent}%`;
+        rankProgressBar.style.backgroundColor = currentRank.color;
+      } else {
+        // Max Rank (Legend)
+        xpDisplay.textContent = `${state.xp} XP`;
+        nextRankMsg.textContent = 'Maximum Rank Reached';
+        nextRankLabel.textContent = 'MAX';
+        rankProgressBar.style.width = '100%';
+        rankProgressBar.style.backgroundColor = currentRank.color;
+      }
+    }
+
+    function calculateStreaks() {
+      if (state.logs.length === 0) {
+        currentStreakStat.textContent = '0';
+        bestStreakStat.textContent = '0';
+        return;
+      }
+
+      const sortedLogs = [...new Set(state.logs.map(l => l.split('T')[0]))].sort((a, b) => new Date(b) - new Date(a));
+      
+      let currentStreak = 0;
+      let bestStreak = 0;
+      let tempStreak = 0;
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      const latestLog = new Date(sortedLogs[0]);
+      latestLog.setHours(0,0,0,0);
+
+      if (latestLog.getTime() >= yesterday.getTime()) {
+        currentStreak = 1;
+        for (let i = 0; i < sortedLogs.length - 1; i++) {
+          const d1 = new Date(sortedLogs[i]);
+          const d2 = new Date(sortedLogs[i+1]);
+          const diff = (d1 - d2) / (1000 * 60 * 60 * 24);
+          if (diff <= 1.5) currentStreak++; else break;
+        }
+      }
+
+      tempStreak = 1;
+      bestStreak = 1;
+      for (let i = 0; i < sortedLogs.length - 1; i++) {
+        const d1 = new Date(sortedLogs[i]);
+        const d2 = new Date(sortedLogs[i+1]);
+        const diff = (d1 - d2) / (1000 * 60 * 60 * 24);
+        if (diff <= 1.5) tempStreak++; else tempStreak = 1;
+        if (tempStreak > bestStreak) bestStreak = tempStreak;
+      }
+
+      currentStreakStat.textContent = currentStreak;
+      bestStreakStat.textContent = bestStreak;
+    }
+
+    function attachEventListeners() {
+      editBtn.addEventListener('click', () => {
+        usernameInput.value = state.profile.username;
+        editModal.classList.remove('opacity-0', 'pointer-events-none');
+        modalContent.classList.remove('scale-95');
+      });
+
+      cancelEditBtn.addEventListener('click', () => {
+        editModal.classList.add('opacity-0', 'pointer-events-none');
+        modalContent.classList.add('scale-95');
+      });
+
+      saveUsernameBtn.addEventListener('click', () => {
+        const newName = usernameInput.value.trim();
+        if (newName) {
+          state.profile.username = newName;
+          save();
+          updateUI();
+          editModal.classList.add('opacity-0', 'pointer-events-none');
+          modalContent.classList.add('scale-95');
+        }
+      });
+
+      resetBtn.addEventListener('click', () => {
+        if (confirm('Are you absolutely sure? This will wipe ALL your profile data, workout logs, and custom splits. This action cannot be undone.')) {
+          localStorage.removeItem('gymforge_training_tracker');
+          window.location.href = '/training-tracker';
+        }
+      });
+
+      // Close modal on backdrop click
+      editModal.addEventListener('click', (e) => {
+        if (e.target === editModal) cancelEditBtn.click();
+      });
+    }
+
+    init();
+  </script>
+</Layout>
+
+<style>
+  .glass-panel {
+    background: rgba(24, 24, 27, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(39, 39, 42, 0.8);
+  }
+</style>

@@ -1,0 +1,888 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout 
+  title="GymForge | Barbell Plate Calculator - Free Gym Weight Calculator" 
+  description="Free gym plate calculator for symmetrical barbell loading. Supports kg/kilo plate calculations, custom bar weights, and visual barbell rendering. Fast, accurate, and mobile-friendly."
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a barbell plate calculator?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A barbell plate calculator helps you determine which weight plates should be loaded on each side of a barbell to reach your target weight."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I calculate plates for a barbell?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Subtract the barbell weight from the target weight and divide the remaining weight equally between both sides of the bar."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What barbell weight should I use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most Olympic barbells weigh 20kg, while women's barbells usually weigh 15kg. Some specialty bars may have different weights."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use this calculator for bench press?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. This calculator can be used for bench press, squat, deadlift, overhead press, and most barbell exercises."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does this calculator work in kilograms and pounds?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. You can calculate plate combinations using either kilograms (kg) or pounds (lbs), depending on your gym setup."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What if my gym doesn't have certain plate sizes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can select the available plate sizes and the calculator will generate the closest possible plate combination."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How accurate is the plate calculator?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The calculator uses standard barbell loading calculations and provides accurate plate combinations based on the selected plates."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why do I need equal plates on both sides?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Equal loading keeps the barbell balanced and safe to lift."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the most common barbell weight?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The most common Olympic barbell weighs 20kg (44 lbs)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this barbell plate calculator free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. GymForge provides a free plate calculator with no registration required."
+        }
+      }
+    ]
+  })} />
+  <section class="px-4 sm:px-8 py-12 max-w-7xl mx-auto w-full flex-grow flex flex-col">
+    <!-- Breadcrumb & Header -->
+    <div class="flex flex-col gap-3 mb-10">
+      <div class="flex items-center gap-2 text-xs font-mono text-gym-muted">
+        <a href="/" class="hover:text-accent-lime transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-white">Plate Calculator</span>
+      </div>
+      <h1 class="font-display font-extrabold text-3xl md:text-5xl text-white tracking-tight">
+        Barbell plate calculator<span class="text-accent-lime">.</span>
+      </h1>
+      <p class="text-gym-muted max-w-xl">
+        Calculate the optimal combination of plates to load on your bar. Fully customisable barbell weights and available plate sizes.
+      </p>
+    </div>
+
+    <!-- Main Workspace Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Column: Controls (lg:col-span-5) -->
+      <div class="lg:col-span-5 flex flex-col gap-6">
+        
+        <!-- Target Weight Input Card -->
+        <div class="rounded-2xl border border-gym-border bg-gym-card p-6 shadow-xl relative overflow-hidden">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-sm font-mono font-medium text-accent-lime uppercase tracking-wider">01. Target weight</span>
+            <span class="text-xs font-mono text-gym-muted">Kilograms (kg)</span>
+          </div>
+          
+          <!-- Large Number Readout -->
+          <div class="flex items-end justify-between gap-4 mb-6">
+            <div class="flex items-baseline gap-1">
+              <input 
+                type="number" 
+                id="target-weight-input" 
+                value="100" 
+                min="10" 
+                max="500" 
+                step="0.5"
+                class="font-display font-bold text-5xl md:text-6xl text-white bg-transparent border-b border-gym-border focus:border-accent-lime outline-none min-w-[6ch] w-auto py-1 font-mono tracking-tighter"
+              />
+              <span class="text-gym-muted text-xl font-bold font-display">kg</span>
+            </div>
+            
+            <!-- Unit Conversion Tip (lbs estimate) -->
+            <div class="text-right font-mono text-xs text-gym-muted mb-2">
+              &approx; <span id="weight-lbs-text" class="text-white font-medium">220.5</span> lbs
+            </div>
+          </div>
+          
+          <!-- Slider Input -->
+          <div class="mb-6">
+            <input 
+              type="range" 
+              id="target-weight-slider" 
+              min="20" 
+              max="300" 
+              step="1" 
+              value="100"
+              class="w-full accent-accent-lime bg-gym-dark h-2 rounded-lg cursor-pointer border border-gym-border touch-none"
+            />
+            <div class="flex justify-between font-mono text-[10px] text-gym-muted mt-2">
+              <span>20 kg</span>
+              <span>100 kg</span>
+              <span>200 kg</span>
+              <span>300 kg</span>
+            </div>
+          </div>
+          
+          <!-- Quick Selection Buttons -->
+          <div>
+            <span class="block text-xs font-semibold text-gym-muted mb-3">Quick load targets:</span>
+            <div class="grid grid-cols-5 gap-2">
+              <button data-weight="60" class="quick-weight-btn py-2 text-xs font-mono font-semibold bg-gym-dark hover:bg-zinc-800 text-gym-muted hover:text-white border border-gym-border hover:border-gym-border-strong rounded-lg transition-all cursor-pointer">60k</button>
+              <button data-weight="100" class="quick-weight-btn py-2 text-xs font-mono font-semibold bg-gym-dark hover:bg-zinc-800 text-gym-muted hover:text-white border border-gym-border hover:border-gym-border-strong rounded-lg transition-all cursor-pointer">100k</button>
+              <button data-weight="140" class="quick-weight-btn py-2 text-xs font-mono font-semibold bg-gym-dark hover:bg-zinc-800 text-gym-muted hover:text-white border border-gym-border hover:border-gym-border-strong rounded-lg transition-all cursor-pointer">140k</button>
+              <button data-weight="180" class="quick-weight-btn py-2 text-xs font-mono font-semibold bg-gym-dark hover:bg-zinc-800 text-gym-muted hover:text-white border border-gym-border hover:border-gym-border-strong rounded-lg transition-all cursor-pointer">180k</button>
+              <button data-weight="220" class="quick-weight-btn py-2 text-xs font-mono font-semibold bg-gym-dark hover:bg-zinc-800 text-gym-muted hover:text-white border border-gym-border hover:border-gym-border-strong rounded-lg transition-all cursor-pointer">220k</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barbell Settings Card -->
+        <div class="rounded-2xl border border-gym-border bg-gym-card p-6 shadow-xl">
+          <span class="block text-sm font-mono font-medium text-accent-cyan uppercase tracking-wider mb-4">02. Barbell weight</span>
+          
+          <!-- Selector Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+            <label class="cursor-pointer">
+              <input type="radio" name="bar-weight" value="20" checked class="peer sr-only" />
+              <div class="py-3 text-center rounded-xl border border-gym-border bg-gym-dark text-xs font-mono font-semibold text-gym-muted peer-checked:border-accent-cyan peer-checked:text-accent-cyan peer-checked:bg-accent-cyan/5 transition-all">
+                20kg <span class="block text-[9px] text-zinc-500 font-normal">Standard</span>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="bar-weight" value="15" class="peer sr-only" />
+              <div class="py-3 text-center rounded-xl border border-gym-border bg-gym-dark text-xs font-mono font-semibold text-gym-muted peer-checked:border-accent-cyan peer-checked:text-accent-cyan peer-checked:bg-accent-cyan/5 transition-all">
+                15kg <span class="block text-[9px] text-zinc-500 font-normal">Women's</span>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="bar-weight" value="25" class="peer sr-only" />
+              <div class="py-3 text-center rounded-xl border border-gym-border bg-gym-dark text-xs font-mono font-semibold text-gym-muted peer-checked:border-accent-cyan peer-checked:text-accent-cyan peer-checked:bg-accent-cyan/5 transition-all">
+                25kg <span class="block text-[9px] text-zinc-500 font-normal">Squat Bar</span>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="bar-weight" value="custom" class="peer sr-only" id="bar-weight-custom-radio" />
+              <div class="py-3 text-center rounded-xl border border-gym-border bg-gym-dark text-xs font-mono font-semibold text-gym-muted peer-checked:border-accent-cyan peer-checked:text-accent-cyan peer-checked:bg-accent-cyan/5 transition-all">
+                Custom <span class="block text-[9px] text-zinc-500 font-normal" id="custom-bar-label">...</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Custom bar weight input (hidden initially) -->
+          <div id="custom-bar-input-wrapper" class="hidden animate-slideIn">
+            <div class="flex items-center gap-2 border border-gym-border focus-within:border-accent-cyan rounded-xl bg-gym-dark px-3 py-2">
+              <input 
+                type="number" 
+                id="custom-bar-weight" 
+                placeholder="Custom bar weight" 
+                value="20" 
+                min="0"
+                max="100"
+                step="0.1"
+                class="w-full bg-transparent text-sm outline-none text-white font-mono"
+              />
+              <span class="text-xs font-mono text-gym-muted">kg</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Available Plates Card -->
+        <div class="rounded-2xl border border-gym-border bg-gym-card p-6 shadow-xl">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-sm font-mono font-medium text-accent-orange uppercase tracking-wider">03. Available plate sizes</span>
+            <button id="toggle-all-plates-btn" class="text-xs font-mono text-accent-lime hover:underline cursor-pointer">Uncheck All</button>
+          </div>
+          
+          <div class="flex flex-col gap-3">
+            <label class="flex items-center justify-between p-3 rounded-xl border border-gym-border bg-gym-dark/50 hover:border-gym-border-strong transition-all cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="w-3.5 h-3.5 rounded-full bg-accent-red shadow-[0_0_8px_#ef4444]"></span>
+                <span class="font-display font-bold text-white text-base">25 kg</span>
+              </div>
+              <input type="checkbox" data-plate="25" checked class="plate-checkbox w-5 h-5 accent-accent-lime bg-gym-dark border-gym-border rounded cursor-pointer" />
+            </label>
+            <label class="flex items-center justify-between p-3 rounded-xl border border-gym-border bg-gym-dark/50 hover:border-gym-border-strong transition-all cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="w-3.5 h-3.5 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="font-display font-bold text-white text-base">20 kg</span>
+              </div>
+              <input type="checkbox" data-plate="20" checked class="plate-checkbox w-5 h-5 accent-accent-lime bg-gym-dark border-gym-border rounded cursor-pointer" />
+            </label>
+            <label class="flex items-center justify-between p-3 rounded-xl border border-gym-border bg-gym-dark/50 hover:border-gym-border-strong transition-all cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="w-3.5 h-3.5 rounded-full bg-yellow-500 shadow-[0_0_8px_#eab308]"></span>
+                <span class="font-display font-bold text-white text-base">15 kg</span>
+              </div>
+              <input type="checkbox" data-plate="15" checked class="plate-checkbox w-5 h-5 accent-accent-lime bg-gym-dark border-gym-border rounded cursor-pointer" />
+            </label>
+            <label class="flex items-center justify-between p-3 rounded-xl border border-gym-border bg-gym-dark/50 hover:border-gym-border-strong transition-all cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="w-3.5 h-3.5 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]"></span>
+                <span class="font-display font-bold text-white text-base">10 kg</span>
+              </div>
+              <input type="checkbox" data-plate="10" checked class="plate-checkbox w-5 h-5 accent-accent-lime bg-gym-dark border-gym-border rounded cursor-pointer" />
+            </label>
+            <label class="flex items-center justify-between p-3 rounded-xl border border-gym-border bg-gym-dark/50 hover:border-gym-border-strong transition-all cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="w-3.5 h-3.5 rounded-full bg-zinc-100 shadow-[0_0_8px_#f4f4f5]"></span>
+                <span class="font-display font-bold text-white text-base">5 kg</span>
+              </div>
+              <input type="checkbox" data-plate="5" checked class="plate-checkbox w-5 h-5 accent-accent-lime bg-gym-dark border-gym-border rounded cursor-pointer" />
+            </label>
+            <label class="flex items-center justify-between p-3 rounded-xl border border-gym-border bg-gym-dark/50 hover:border-gym-border-strong transition-all cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="w-3.5 h-3.5 rounded-full bg-zinc-800 border border-zinc-700 shadow-[0_0_8px_rgba(24,24,27,0.8)]"></span>
+                <span class="font-display font-bold text-white text-base">2.5 kg</span>
+              </div>
+              <input type="checkbox" data-plate="2.5" checked class="plate-checkbox w-5 h-5 accent-accent-lime bg-gym-dark border-gym-border rounded cursor-pointer" />
+            </label>
+            <label class="flex items-center justify-between p-3 rounded-xl border border-gym-border bg-gym-dark/50 hover:border-gym-border-strong transition-all cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="w-3.5 h-3.5 rounded-full bg-zinc-400 shadow-[0_0_8px_#a1a1aa]"></span>
+                <span class="font-display font-bold text-white text-base">1.25 kg</span>
+              </div>
+              <input type="checkbox" data-plate="1.25" checked class="plate-checkbox w-5 h-5 accent-accent-lime bg-gym-dark border-gym-border rounded cursor-pointer" />
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Column: Barbell & Readouts (lg:col-span-7) -->
+      <div class="lg:col-span-7 flex flex-col gap-6 w-full">
+        
+        <!-- Visual Barbell Box -->
+        <div class="rounded-2xl border border-gym-border bg-gym-card/40 p-6 shadow-xl flex flex-col relative justify-between overflow-hidden" style="contain: layout;">
+          <div class="absolute inset-0 bg-radial-[circle_at_bottom] from-accent-lime/5 via-transparent to-transparent pointer-events-none -z-10"></div>
+          
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-sm font-mono font-medium text-accent-lime uppercase tracking-wider">Barbell Visualiser</span>
+            <span class="text-xs font-mono text-gym-muted" id="bar-type-indicator">20kg Barbell</span>
+          </div>
+
+          <!-- Barbell visual wrapper: fixed height, no overflow, scales internally -->
+          <div id="barbell-visual-wrapper" class="w-full overflow-hidden flex justify-center items-center" style="height: 180px;">
+            <!-- Scale container: always 700px wide internally, scaled via JS transform -->
+            <div style="width: 700px; height: 160px; transform-origin: center center; will-change: transform;" id="barbell-scale-container">
+              <div id="barbell-container" class="flex items-center justify-center relative w-full h-full select-none">
+                
+                <!-- Left Sleeve Area -->
+                <div class="flex items-center justify-end h-full">
+                  <div class="w-1.5 h-5 bg-zinc-600 rounded-l-sm border-r border-zinc-700 shadow-inner"></div>
+                  <div class="w-48 h-6 bg-linear-to-b from-zinc-400 via-zinc-200 to-zinc-500 border-y border-zinc-500 relative flex items-center justify-end pr-0.5">
+                    <div class="absolute left-1/3 right-0 top-0 bottom-0 bg-[repeating-linear-gradient(90deg,rgba(0,0,0,0.06),rgba(0,0,0,0.06)_2px,transparent_2px,transparent_4px)]"></div>
+                    <div id="sleeve-left" class="flex flex-row-reverse items-center justify-start h-full gap-[2px]"></div>
+                  </div>
+                  <div class="w-4 h-12 bg-linear-to-b from-zinc-300 via-zinc-400 to-zinc-600 border border-zinc-500 rounded-l-[4px] shadow-lg z-20"></div>
+                </div>
+                
+                <!-- Center Steel Bar Shaft -->
+                <div class="w-64 h-5 bg-linear-to-b from-zinc-600 via-zinc-800 to-zinc-900 border-y border-zinc-700 relative flex items-center justify-center">
+                  <div class="absolute inset-0 bg-[repeating-linear-gradient(45deg,rgba(255,255,255,0.03),rgba(255,255,255,0.03)_2px,transparent_2px,transparent_4px)]"></div>
+                  <span class="font-display font-extrabold text-[10px] tracking-widest text-zinc-500 uppercase select-none opacity-40">GYMFORGE</span>
+                </div>
+                
+                <!-- Right Sleeve Area -->
+                <div class="flex items-center justify-start h-full">
+                  <div class="w-4 h-12 bg-linear-to-b from-zinc-300 via-zinc-400 to-zinc-600 border border-zinc-500 rounded-r-[4px] shadow-lg z-20"></div>
+                  <div class="w-48 h-6 bg-linear-to-b from-zinc-400 via-zinc-200 to-zinc-500 border-y border-zinc-500 relative flex items-center justify-start pl-0.5">
+                    <div class="absolute right-1/3 left-0 top-0 bottom-0 bg-[repeating-linear-gradient(90deg,rgba(0,0,0,0.06),rgba(0,0,0,0.06)_2px,transparent_2px,transparent_4px)]"></div>
+                    <div id="sleeve-right" class="flex flex-row items-center justify-start h-full gap-[2px]"></div>
+                  </div>
+                  <div class="w-1.5 h-5 bg-zinc-600 rounded-r-sm border-l border-zinc-700 shadow-inner"></div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center text-xs text-gym-muted font-mono mt-3">
+            Barbell scale adapted for display. Load standard plates inside-out.
+          </div>
+        </div>
+
+        <!-- Numeric Outputs & Results Card -->
+        <div class="rounded-2xl border border-gym-border bg-gym-card p-6 shadow-xl flex flex-col gap-6" style="contain: layout;">
+          
+          <!-- Exact/Closest Warning alert banner -->
+          <div id="alert-banner" class="grid grid-rows-[0fr] opacity-0 transition-all duration-300 overflow-hidden">
+            <div class="min-h-0">
+              <div id="alert-banner-content" class="flex items-start gap-3 p-4 rounded-xl border mb-6">
+                <svg class="w-5 h-5 shrink-0 mt-0.5" id="alert-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div class="text-xs leading-relaxed">
+                  <span class="font-bold block" id="alert-title">Target Weight Mismatch</span>
+                  <span id="alert-message">We loaded the closest weight possible using your available plates.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
+            <div class="flex flex-col p-4 rounded-xl bg-gym-dark/50 border border-gym-border">
+              <span class="text-xs font-mono text-gym-muted mb-1">Total Loaded Weight</span>
+              <div class="flex items-baseline gap-1">
+                <span id="res-total-weight" class="font-display font-black text-4xl text-accent-lime glow-lime">20</span>
+                <span class="text-gym-muted font-bold font-display text-sm">kg</span>
+              </div>
+            </div>
+            <div class="flex flex-col p-4 rounded-xl bg-gym-dark/50 border border-gym-border">
+              <span class="text-xs font-mono text-gym-muted mb-1">Weight Per Side</span>
+              <div class="flex items-baseline gap-1">
+                <span id="res-side-weight" class="font-display font-black text-4xl text-white">0</span>
+                <span class="text-gym-muted font-bold font-display text-sm">kg</span>
+              </div>
+              <span class="text-[10px] font-mono text-zinc-500 mt-0.5">(excluding barbell)</span>
+            </div>
+            <div class="flex flex-col p-4 rounded-xl bg-gym-dark/50 border border-gym-border">
+              <span class="text-xs font-mono text-gym-muted mb-1">Total Plates Loaded</span>
+              <div class="flex items-baseline gap-1">
+                <span id="res-plate-count" class="font-display font-black text-4xl text-white">0</span>
+                <span class="text-gym-muted font-bold font-display text-sm">pcs</span>
+              </div>
+              <span class="text-[10px] font-mono text-zinc-500 mt-0.5" id="res-plates-per-side">(0 per side)</span>
+            </div>
+          </div>
+
+          <div class="w-full h-[1px] bg-gym-border"></div>
+
+          <div>
+            <span class="block text-xs font-semibold text-gym-muted mb-4 uppercase font-mono tracking-wider">Plate Loading Breakdown (Per Side)</span>
+            <div id="breakdown-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3 min-h-[120px]">
+              <div class="col-span-2 text-center text-sm text-gym-muted py-2" id="empty-breakdown-msg">
+                No plates loaded. Load barbell to see breakdown.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="mt-24 max-w-4xl mx-auto w-full">
+      <div class="flex flex-col gap-3 mb-12">
+        <span class="font-mono text-xs uppercase tracking-wider text-accent-lime font-medium">Common Questions</span>
+        <h2 class="font-display font-bold text-3xl text-white tracking-tight">
+          Plate Calculator FAQs
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4">
+        <div class="rounded-2xl border border-gym-border bg-gym-card/40 p-6 hover:border-gym-border-strong transition-colors">
+          <h3 class="text-white font-bold text-lg mb-2">What is a barbell plate calculator?</h3>
+          <p class="text-gym-muted text-sm leading-relaxed">
+            A <strong>barbell plate calculator</strong> is a digital tool that helps lifters determine exactly which weight plates need to be loaded onto a barbell to reach a specific target weight. It eliminates mental math and ensures that both sides of the bar are loaded symmetrically for safety and balance.
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-gym-border bg-gym-card/40 p-6 hover:border-gym-border-strong transition-colors">
+          <h3 class="text-white font-bold text-lg mb-2">How do I use this weight plate calculator?</h3>
+          <p class="text-gym-muted text-sm leading-relaxed">
+            Using the GymForge <strong>weight plate calculator</strong> is simple: enter your target weight in the input field or use the slider, select your barbell weight (standard is 20kg), and check the plates you have available in your gym. The tool instantly calculates the optimal combination and provides a visual render of the loaded bar.
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-gym-border bg-gym-card/40 p-6 hover:border-gym-border-strong transition-colors">
+          <h3 class="text-white font-bold text-lg mb-2">Does this kg plate calculator support custom bar weights?</h3>
+          <p class="text-gym-muted text-sm leading-relaxed">
+            Yes! Our <strong>kg plate calculator</strong> allows you to select from standard 20kg, 15kg (women's), and 25kg (squat) bars. You can also enter a custom bar weight if you are using specialized equipment like a safety squat bar or a swiss bar.
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-gym-border bg-gym-card/40 p-6 hover:border-gym-border-strong transition-colors">
+          <h3 class="text-white font-bold text-lg mb-2">Why is a kilo plate calculator better than mental math?</h3>
+          <p class="text-gym-muted text-sm leading-relaxed">
+            When training at high intensities, mental fatigue can lead to loading errors. A <strong>kilo plate calculator</strong> ensures precision, helping you avoid "mismatched" sides which can lead to injury. It also helps you plan your jumps in weight more effectively during a peaking cycle.
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-gym-border bg-gym-card/40 p-6 hover:border-gym-border-strong transition-colors">
+          <h3 class="text-white font-bold text-lg mb-2">Is this gym plate calculator mobile-friendly?</h3>
+          <p class="text-gym-muted text-sm leading-relaxed">
+            Absolutely. GymForge is built for the gym floor. Our <strong>gym plate calculator</strong> features large touch targets, a responsive design, and an offline-first approach (via local storage) so you can calculate your loads even with poor gym Wi-Fi.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const PLATE_SPECS = {
+      25: { colorClass: 'bg-accent-red', heightClass: 'h-44', widthClass: 'w-6', borderClass: 'border-red-950', textClass: 'text-white' },
+      20: { colorClass: 'bg-blue-500', heightClass: 'h-40', widthClass: 'w-6', borderClass: 'border-blue-950', textClass: 'text-white' },
+      15: { colorClass: 'bg-yellow-500', heightClass: 'h-36', widthClass: 'w-5.5', borderClass: 'border-yellow-950', textClass: 'text-zinc-950' },
+      10: { colorClass: 'bg-green-500', heightClass: 'h-32', widthClass: 'w-5', borderClass: 'border-green-950', textClass: 'text-white' },
+      5: { colorClass: 'bg-zinc-100', heightClass: 'h-24', widthClass: 'w-4.5', borderClass: 'border-zinc-300', textClass: 'text-zinc-950' },
+      2.5: { colorClass: 'bg-zinc-800', heightClass: 'h-20', widthClass: 'w-4', borderClass: 'border-zinc-700', textClass: 'text-zinc-200' },
+      1.25: { colorClass: 'bg-zinc-400', heightClass: 'h-16', widthClass: 'w-3.5', borderClass: 'border-zinc-500', textClass: 'text-zinc-950' }
+    };
+
+    const targetWeightInput = document.getElementById('target-weight-input');
+    const targetWeightSlider = document.getElementById('target-weight-slider');
+    const weightLbsText = document.getElementById('weight-lbs-text');
+    const quickWeightBtns = document.querySelectorAll('.quick-weight-btn');
+    const barWeightRadios = document.getElementsByName('bar-weight');
+    const customBarInputWrapper = document.getElementById('custom-bar-input-wrapper');
+    const customBarWeightInput = document.getElementById('custom-bar-weight');
+    const customBarLabel = document.getElementById('custom-bar-label');
+    const plateCheckboxes = document.querySelectorAll('.plate-checkbox');
+    const toggleAllPlatesBtn = document.getElementById('toggle-all-plates-btn');
+    const barTypeIndicator = document.getElementById('bar-type-indicator');
+    const alertBanner = document.getElementById('alert-banner');
+    const alertTitle = document.getElementById('alert-title');
+    const alertMessage = document.getElementById('alert-message');
+    const alertIcon = document.getElementById('alert-icon');
+    const resTotalWeight = document.getElementById('res-total-weight');
+    const resSideWeight = document.getElementById('res-side-weight');
+    const resPlateCount = document.getElementById('res-plate-count');
+    const resPlatesPerSide = document.getElementById('res-plates-per-side');
+    const breakdownList = document.getElementById('breakdown-list');
+    const emptyBreakdownMsg = document.getElementById('empty-breakdown-msg');
+    const sleeveLeft = document.getElementById('sleeve-left');
+    const sleeveRight = document.getElementById('sleeve-right');
+    const barbellVisualWrapper = document.getElementById('barbell-visual-wrapper');
+    const barbellScaleContainer = document.getElementById('barbell-scale-container');
+
+    let targetWeight = 100;
+    let selectedBarWeightType = '20';
+    let customBarWeightVal = 20;
+    let availablePlates = [25, 20, 15, 10, 5, 2.5, 1.25];
+    let updatePending = false;
+    let isSliderDragging = false;
+
+    // Scale barbell to fit wrapper width — no layout shift, just CSS transform
+    function scaleBarbellToFit() {
+      const wrapperWidth = barbellVisualWrapper.offsetWidth;
+      const scale = Math.min(1, wrapperWidth / 700);
+      barbellScaleContainer.style.transform = `scale(${scale})`;
+    }
+
+    function requestUpdate() {
+      if (updatePending) return;
+      updatePending = true;
+      requestAnimationFrame(() => {
+        updateCalculator();
+        updatePending = false;
+      });
+    }
+
+    function getBarWeight() {
+      if (selectedBarWeightType === 'custom') {
+        return parseFloat(customBarWeightInput.value) || 0;
+      }
+      return parseFloat(selectedBarWeightType);
+    }
+
+    function syncSlider(weight) {
+      targetWeightSlider.value = weight;
+    }
+
+    function syncInput(weight) {
+      targetWeightInput.value = weight;
+    }
+
+    function updateLbsText(kg) {
+      weightLbsText.textContent = (kg * 2.20462).toFixed(1);
+    }
+
+    function calculatePlates(targetWeight, barWeight, availablePlates) {
+      const targetPerSide = (targetWeight - barWeight) / 2;
+      
+      if (targetPerSide <= 0) {
+        return {
+          success: true, exact: true,
+          totalWeight: barWeight, weightPerSide: 0,
+          plates: [], breakdown: [],
+          remainder: Math.max(0, targetWeight - barWeight)
+        };
+      }
+
+      const T = Math.round(targetPerSide * 100);
+      const coins = availablePlates.map(p => Math.round(p * 100)).sort((a, b) => b - a);
+
+      if (coins.length === 0) {
+        return {
+          success: false, exact: false,
+          totalWeight: barWeight, weightPerSide: 0,
+          plates: [], breakdown: [],
+          remainder: targetWeight - barWeight,
+          error: 'No plate sizes selected'
+        };
+      }
+
+      const maxCoin = Math.max(...coins);
+      const maxLimit = T + maxCoin;
+      const dp = new Array(maxLimit + 1).fill(Infinity);
+      const parent = new Array(maxLimit + 1).fill(-1);
+      const plateUsed = new Array(maxLimit + 1).fill(-1);
+      dp[0] = 0;
+
+      for (let i = 1; i <= maxLimit; i++) {
+        for (const c of coins) {
+          if (i - c >= 0 && dp[i - c] + 1 < dp[i]) {
+            dp[i] = dp[i - c] + 1;
+            parent[i] = i - c;
+            plateUsed[i] = c;
+          }
+        }
+      }
+
+      let bestW = 0, minDiff = Infinity, bestPlateCount = Infinity;
+      for (let w = 0; w <= maxLimit; w++) {
+        if (dp[w] !== Infinity) {
+          const diff = Math.abs(w - T);
+          if (diff < minDiff) {
+            minDiff = diff; bestW = w; bestPlateCount = dp[w];
+          } else if (diff === minDiff) {
+            if (w < T || (w === bestW && dp[w] < bestPlateCount)) {
+              bestW = w; bestPlateCount = dp[w];
+            }
+          }
+        }
+      }
+
+      const platesUsed = [];
+      let curr = bestW;
+      while (curr > 0) {
+        platesUsed.push(plateUsed[curr] / 100);
+        curr = parent[curr];
+      }
+      platesUsed.sort((a, b) => b - a);
+
+      const groups = {};
+      for (const p of platesUsed) groups[p] = (groups[p] || 0) + 1;
+
+      const calcSideWeight = bestW / 100;
+      const calcTotalWeight = barWeight + calcSideWeight * 2;
+      const remainder = Math.round((targetWeight - calcTotalWeight) * 100) / 100;
+
+      return {
+        success: true,
+        exact: minDiff === 0,
+        totalWeight: calcTotalWeight,
+        weightPerSide: calcSideWeight,
+        plates: platesUsed,
+        breakdown: Object.entries(groups).map(([plate, count]) => ({
+          plate: parseFloat(plate), count
+        })).sort((a, b) => b.plate - a.plate),
+        remainder
+      };
+    }
+
+    function updateCalculator() {
+      const barWeight = getBarWeight();
+
+      if (selectedBarWeightType === 'custom') {
+        barTypeIndicator.textContent = `Custom (${barWeight}kg) Barbell`;
+        customBarLabel.textContent = `${barWeight}kg`;
+      } else {
+        barTypeIndicator.textContent = `${barWeight}kg Barbell`;
+        customBarLabel.textContent = '...';
+      }
+
+      const result = calculatePlates(targetWeight, barWeight, availablePlates);
+      const alertBannerContent = document.getElementById('alert-banner-content');
+
+      if (result.success) {
+        resTotalWeight.textContent = result.totalWeight.toString();
+        resSideWeight.textContent = result.weightPerSide.toString();
+        const sidePlatesCount = result.plates.length;
+        resPlateCount.textContent = (sidePlatesCount * 2).toString();
+        resPlatesPerSide.textContent = `(${sidePlatesCount} per side)`;
+
+        if (!result.exact) {
+          alertBanner.classList.remove('grid-rows-[0fr]', 'opacity-0');
+          alertBanner.classList.add('grid-rows-[1fr]', 'opacity-100');
+          alertBannerContent.className = 'flex items-start gap-3 p-4 rounded-xl border mb-6 bg-yellow-950/20 border-yellow-500/30 text-yellow-300';
+          alertTitle.textContent = "Closest Weight Target Selected";
+          alertMessage.textContent = result.remainder > 0
+            ? `Could not load exact target. Loaded ${result.totalWeight}kg (under by ${result.remainder.toFixed(2)}kg).`
+            : `Could not load exact target. Loaded ${result.totalWeight}kg (over by ${Math.abs(result.remainder).toFixed(2)}kg).`;
+        } else if (result.totalWeight === barWeight && targetWeight > barWeight) {
+          alertBanner.classList.remove('grid-rows-[0fr]', 'opacity-0');
+          alertBanner.classList.add('grid-rows-[1fr]', 'opacity-100');
+          alertBannerContent.className = 'flex items-start gap-3 p-4 rounded-xl border mb-6 bg-zinc-800/40 border-zinc-700/60 text-zinc-400';
+          alertTitle.textContent = "Barbell Only";
+          alertMessage.textContent = `Target weight equals or is less than barbell weight. No plates needed.`;
+        } else {
+          alertBanner.classList.remove('grid-rows-[1fr]', 'opacity-100');
+          alertBanner.classList.add('grid-rows-[0fr]', 'opacity-0');
+        }
+
+        // Breakdown
+        if (result.breakdown.length === 0) {
+          emptyBreakdownMsg.classList.remove('hidden');
+          breakdownList.replaceChildren(emptyBreakdownMsg);
+        } else {
+          emptyBreakdownMsg.classList.add('hidden');
+          const items = result.breakdown.map(item => {
+            const spec = PLATE_SPECS[item.plate] || { colorClass: 'bg-zinc-500' };
+            const div = document.createElement('div');
+            div.className = "flex items-center justify-between p-3.5 rounded-xl bg-gym-dark border border-gym-border hover:border-gym-border-strong transition-colors";
+            div.innerHTML = `
+              <div class="flex items-center gap-3">
+                <span class="w-3 h-3 rounded-full ${spec.colorClass}"></span>
+                <span class="font-display font-bold text-white">${item.plate} kg Plate</span>
+              </div>
+              <span class="font-mono text-xs bg-zinc-800/80 text-white border border-zinc-700/60 px-2.5 py-1 rounded-md font-semibold">${item.count} per side</span>
+            `;
+            return div;
+          });
+          breakdownList.replaceChildren(...items);
+        }
+
+        renderBarbell(result.plates);
+      } else {
+        resTotalWeight.textContent = barWeight.toString();
+        resSideWeight.textContent = "0";
+        resPlateCount.textContent = "0";
+        resPlatesPerSide.textContent = "(0 per side)";
+        alertBanner.classList.remove('grid-rows-[0fr]', 'opacity-0');
+        alertBanner.classList.add('grid-rows-[1fr]', 'opacity-100');
+        alertBannerContent.className = 'flex items-start gap-3 p-4 rounded-xl border mb-6 bg-red-950/20 border-red-500/30 text-red-300';
+        alertTitle.textContent = "Loading Error";
+        alertMessage.textContent = result.error || "Please select at least one available plate size.";
+        breakdownList.replaceChildren(emptyBreakdownMsg);
+        emptyBreakdownMsg.classList.remove('hidden');
+        renderBarbell([]);
+      }
+      saveToLocalStorage();
+    }
+
+    function renderBarbell(plates) {
+      // Plate-count based scale (applied on top of wrapper scale)
+      const totalPlates = plates.length;
+      let plateScale = 1;
+      if (totalPlates > 8) plateScale = Math.max(0.6, 1 - (totalPlates - 8) * 0.04);
+      
+      // Combine: wrapper fit scale * plate count scale
+      const wrapperWidth = barbellVisualWrapper.offsetWidth;
+      const fitScale = Math.min(1, wrapperWidth / 700);
+      barbellScaleContainer.style.transform = `scale(${fitScale * plateScale})`;
+
+      const leftPlates = [];
+      const rightPlates = [];
+
+      plates.forEach((p, idx) => {
+        const spec = PLATE_SPECS[p];
+        if (!spec) return;
+
+        const animL = isSliderDragging ? '' : 'plate-enter-left';
+        const animR = isSliderDragging ? '' : 'plate-enter';
+
+        const plateLeft = document.createElement('div');
+        plateLeft.className = `relative flex items-center justify-center ${spec.colorClass} ${spec.heightClass} ${spec.widthClass} ${spec.borderClass} border border-r-0 rounded-l-[4px] shadow-lg ${animL} select-none text-[8px] sm:text-[10px] font-black ${spec.textClass} font-mono hover:brightness-110 transition-all cursor-help`;
+        plateLeft.style.writingMode = "vertical-lr";
+        if (!isSliderDragging) plateLeft.style.animationDelay = `${idx * 0.05}s`;
+        plateLeft.title = `${p} kg Plate`;
+        plateLeft.innerHTML = `<span>${p}</span>`;
+        leftPlates.push(plateLeft);
+
+        const plateRight = document.createElement('div');
+        plateRight.className = `relative flex items-center justify-center ${spec.colorClass} ${spec.heightClass} ${spec.widthClass} ${spec.borderClass} border border-l-0 rounded-r-[4px] shadow-lg ${animR} select-none text-[8px] sm:text-[10px] font-black ${spec.textClass} font-mono hover:brightness-110 transition-all cursor-help`;
+        plateRight.style.writingMode = "vertical-lr";
+        if (!isSliderDragging) plateRight.style.animationDelay = `${idx * 0.05}s`;
+        plateRight.title = `${p} kg Plate`;
+        plateRight.innerHTML = `<span>${p}</span>`;
+        rightPlates.push(plateRight);
+      });
+
+      sleeveLeft.replaceChildren(...leftPlates);
+      sleeveRight.replaceChildren(...rightPlates);
+    }
+
+    // Event Listeners
+    targetWeightInput.addEventListener('input', (e) => {
+      let val = parseFloat(e.target.value);
+      if (isNaN(val)) return;
+      if (val < 10) val = 10;
+      if (val > 500) val = 500;
+      targetWeight = val;
+      syncSlider(targetWeight);
+      updateLbsText(targetWeight);
+      requestUpdate();
+    });
+
+    // Prevent scroll interference during slider drag
+    targetWeightSlider.addEventListener('touchstart', (e) => {
+      isSliderDragging = true;
+    }, { passive: true });
+
+    targetWeightSlider.addEventListener('touchmove', (e) => {
+      e.stopPropagation();
+    }, { passive: true });
+
+    targetWeightSlider.addEventListener('mousedown', () => { isSliderDragging = true; });
+    window.addEventListener('mouseup', () => { isSliderDragging = false; });
+    window.addEventListener('touchend', () => {
+      isSliderDragging = false;
+    }, { passive: true });
+
+    targetWeightSlider.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      targetWeight = val;
+      syncInput(targetWeight);
+      updateLbsText(targetWeight);
+      requestUpdate();
+    });
+
+    quickWeightBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const weight = parseFloat(e.currentTarget.getAttribute('data-weight'));
+        targetWeight = weight;
+        syncInput(weight);
+        syncSlider(weight);
+        updateLbsText(weight);
+        requestUpdate();
+        e.currentTarget.classList.add('scale-95', 'border-accent-lime');
+        setTimeout(() => e.currentTarget.classList.remove('scale-95', 'border-accent-lime'), 150);
+      });
+    });
+
+    barWeightRadios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        selectedBarWeightType = e.target.value;
+        if (selectedBarWeightType === 'custom') {
+          customBarInputWrapper.classList.remove('hidden');
+          customBarInputWrapper.classList.add('block');
+        } else {
+          customBarInputWrapper.classList.remove('block');
+          customBarInputWrapper.classList.add('hidden');
+        }
+        requestUpdate();
+      });
+    });
+
+    customBarWeightInput.addEventListener('input', () => requestUpdate());
+
+    plateCheckboxes.forEach(box => {
+      box.addEventListener('change', () => {
+        availablePlates = [];
+        plateCheckboxes.forEach(cb => {
+          if (cb.checked) availablePlates.push(parseFloat(cb.getAttribute('data-plate')));
+        });
+        availablePlates.sort((a, b) => b - a);
+        toggleAllPlatesBtn.textContent = availablePlates.length === 0 ? 'Check All' : 'Uncheck All';
+        requestUpdate();
+      });
+    });
+
+    toggleAllPlatesBtn.addEventListener('click', () => {
+      const isUncheckingAll = toggleAllPlatesBtn.textContent === 'Uncheck All';
+      plateCheckboxes.forEach(cb => { cb.checked = !isUncheckingAll; });
+      if (isUncheckingAll) {
+        availablePlates = [];
+        toggleAllPlatesBtn.textContent = 'Check All';
+      } else {
+        availablePlates = [25, 20, 15, 10, 5, 2.5, 1.25];
+        toggleAllPlatesBtn.textContent = 'Uncheck All';
+      }
+      requestUpdate();
+    });
+
+    // Resize: only update scale transform, no layout shift
+    const resizeObserver = new ResizeObserver(() => {
+      scaleBarbellToFit();
+    });
+    resizeObserver.observe(barbellVisualWrapper);
+
+    const STORAGE_KEY = 'gymforge_plate_calc';
+
+    function saveToLocalStorage() {
+      const data = {
+        targetWeight,
+        selectedBarWeightType,
+        customBarWeight: parseFloat(customBarWeightInput.value) || 20,
+        availablePlates
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function loadFromLocalStorage() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return;
+
+      try {
+        const data = JSON.parse(saved);
+        if (data.targetWeight !== undefined) {
+          targetWeight = data.targetWeight;
+          syncInput(targetWeight);
+          syncSlider(targetWeight);
+        }
+        if (data.selectedBarWeightType !== undefined) {
+          selectedBarWeightType = data.selectedBarWeightType;
+          barWeightRadios.forEach(radio => {
+            radio.checked = (radio.value === selectedBarWeightType);
+          });
+          if (selectedBarWeightType === 'custom') {
+            customBarInputWrapper.classList.remove('hidden');
+            customBarInputWrapper.classList.add('block');
+          } else {
+            customBarInputWrapper.classList.remove('block');
+            customBarInputWrapper.classList.add('hidden');
+          }
+        }
+        if (data.customBarWeight !== undefined) {
+          customBarWeightInput.value = data.customBarWeight;
+        }
+        if (data.availablePlates !== undefined) {
+          availablePlates = data.availablePlates;
+          plateCheckboxes.forEach(cb => {
+            const plateVal = parseFloat(cb.getAttribute('data-plate'));
+            cb.checked = availablePlates.includes(plateVal);
+          });
+          toggleAllPlatesBtn.textContent = availablePlates.length === 0 ? 'Check All' : 'Uncheck All';
+        }
+      } catch (e) {
+        console.error('Error loading from localStorage', e);
+      }
+    }
+
+    // Init conversion on mount
+    loadFromLocalStorage();
+    updateLbsText(targetWeight);
+    scaleBarbellToFit();
+    requestUpdate();
+  </script>
+</Layout>

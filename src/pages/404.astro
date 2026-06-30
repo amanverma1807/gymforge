@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="404 - Page Not Found | GymForge" 
+  description="The page you're looking for doesn't exist or has been moved. Return to GymForge's free gym calculators and tools."
+>
+  <section class="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 py-20">
+    <div class="absolute inset-0 bg-radial-[circle_at_center] from-accent-lime/5 via-transparent to-transparent blur-[100px] pointer-events-none -z-10"></div>
+    
+    <div class="mb-8 animate-pulse-slow">
+      <span class="font-display font-extrabold text-8xl md:text-9xl text-accent-lime/30 tracking-tight">404</span>
+    </div>
+    
+    <h1 class="font-display font-bold text-3xl md:text-5xl text-white tracking-tight mb-4">
+      Page Not Found
+    </h1>
+    
+    <p class="text-gym-muted max-w-xl md:text-lg mt-4 leading-relaxed">
+      The page you're looking for doesn't exist or has been moved. Don't worry, even the strongest lifters miss a rep sometimes.
+    </p>
+    
+    <div class="flex flex-col sm:flex-row items-center gap-4 mt-10">
+      <a href="/" class="w-full sm:w-auto px-8 py-4 font-semibold text-gym-dark bg-accent-lime hover:bg-accent-lime-hover rounded-full transition-all hover:scale-105 shadow-[0_0_24px_rgba(163,230,53,0.3)] text-center text-sm md:text-base">
+        Back to Home
+      </a>
+      <a href="/tools/plate-calculator" class="w-full sm:w-auto px-8 py-4 font-semibold text-white bg-gym-card border border-gym-border hover:border-gym-border-strong hover:bg-zinc-800/40 rounded-full transition-all text-center text-sm md:text-base cursor-pointer">
+        Use Plate Calculator
+      </a>
+    </div>
+    
+    <div class="mt-16 grid grid-cols-3 gap-8 max-w-xl mx-auto text-center">
+      <div>
+        <span class="font-display font-bold text-2xl text-accent-lime">01</span>
+        <p class="text-gym-muted text-xs mt-1">Check the URL</p>
+      </div>
+      <div>
+        <span class="font-display font-bold text-2xl text-accent-cyan">02</span>
+        <p class="text-gym-muted text-xs mt-1">Go Home</p>
+      </div>
+      <div>
+        <span class="font-display font-bold text-2xl text-accent-orange">03</span>
+        <p class="text-gym-muted text-xs mt-1">Try Again</p>
+      </div>
+    </div>
+  </section>
+</Layout>

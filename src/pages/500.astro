@@ -1,0 +1,42 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="500 - Server Error | GymForge" 
+  description="Something went wrong on our end. Please try again later or return to GymForge's free gym calculators and tools."
+>
+  <section class="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 py-20">
+    <div class="absolute inset-0 bg-radial-[circle_at_center] from-red-500/5 via-transparent to-transparent blur-[100px] pointer-events-none -z-10"></div>
+    
+    <div class="mb-8 animate-pulse">
+      <span class="font-display font-extrabold text-8xl md:text-9xl text-red-500/30 tracking-tight">500</span>
+    </div>
+    
+    <h1 class="font-display font-bold text-3xl md:text-5xl text-white tracking-tight mb-4">
+      Server Error
+    </h1>
+    
+    <p class="text-gym-muted max-w-xl md:text-lg mt-4 leading-relaxed">
+      Something went wrong on our end. Our team has been notified. Please try again in a few moments.
+    </p>
+    
+    <div class="flex flex-col sm:flex-row items-center gap-4 mt-10">
+      <a href="/" class="w-full sm:w-auto px-8 py-4 font-semibold text-gym-dark bg-accent-lime hover:bg-accent-lime-hover rounded-full transition-all hover:scale-105 shadow-[0_0_24px_rgba(163,230,53,0.3)] text-center text-sm md:text-base">
+        Back to Home
+      </a>
+      <button 
+        onclick="window.location.reload()" 
+        class="w-full sm:w-auto px-8 py-4 font-semibold text-white bg-gym-card border border-gym-border hover:border-gym-border-strong hover:bg-zinc-800/40 rounded-full transition-all text-center text-sm md:text-base cursor-pointer"
+      >
+        Retry
+      </button>
+    </div>
+    
+    <div class="mt-12 p-6 rounded-2xl border border-gym-border bg-gym-card/40 max-w-md mx-auto w-full">
+      <p class="text-gym-muted text-sm leading-relaxed">
+        <strong class="text-white">Tip:</strong> If you were using a calculator, your inputs are saved locally and will be restored when you return.
+      </p>
+    </div>
+  </section>
+</Layout>

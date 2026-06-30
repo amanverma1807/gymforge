@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="GymForge | Privacy Policy" description="Privacy policy for GymForge fitness toolkit.">
+  <section class="px-4 sm:px-8 py-24 max-w-3xl mx-auto w-full flex-grow flex flex-col">
+    <div class="flex flex-col gap-3 mb-10">
+      <div class="flex items-center gap-2 text-xs font-mono text-gym-muted">
+        <a href="/" class="hover:text-accent-lime transition-colors">Home</a>
+        <span>/</span>
+        <span class="text-white">Privacy Policy</span>
+      </div>
+      <h1 class="font-display font-extrabold text-3xl md:text-5xl text-white tracking-tight">
+        Privacy Policy<span class="text-accent-lime">.</span>
+      </h1>
+      <p class="text-gym-muted mt-2">
+        Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+      </p>
+    </div>
+
+    <div class="prose prose-invert max-w-none text-gym-muted leading-relaxed flex flex-col gap-8">
+      <div>
+        <h2 class="text-white text-xl font-bold mb-4">No Personal Data Collection</h2>
+        <p>
+          GymForge is designed to be used without creating an account or providing any personal information. We do not collect, store, or share any personal data from our users. Any values you enter into our calculators (like your weight, lift numbers, or calorie targets) are processed locally in your browser and are never sent to our servers.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-white text-xl font-bold mb-4">Local Storage</h2>
+        <p>
+          Some of our tools may use your browser's local storage to remember your preferences and previous inputs so that they are available when you return to the site. This data remains on your device and is not accessible by us.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-white text-xl font-bold mb-4">Cookies and Advertising</h2>
+        <p>
+          We use Google AdSense to display advertisements on our site. Google uses cookies to serve ads based on your prior visits to our website or other websites on the internet. Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to our site and/or other sites on the Internet.
+        </p>
+        <p class="mt-4">
+          You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" class="text-accent-lime hover:underline">Ads Settings</a>. Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="www.aboutads.info" target="_blank" class="text-accent-lime hover:underline">www.aboutads.info</a>.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-white text-xl font-bold mb-4">Analytics</h2>
+        <p>
+          We may use basic web analytics to understand how users interact with our site and to improve our tools. This information is aggregated and does not identify individual users.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-white text-xl font-bold mb-4">Contact Information</h2>
+        <p>
+          If you have any questions about this Privacy Policy, please contact us at <a href="mailto:aff030832@gmail.com" class="text-accent-lime hover:underline">aff030832@gmail.com</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

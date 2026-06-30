@@ -1,0 +1,48 @@
+---
+/**
+ * ConfirmationModal.astro
+ * A reusable modal for destructive or important actions.
+ */
+---
+
+<div id="confirmation-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gym-dark/80 backdrop-blur-sm animate-fadeIn">
+  <div class="bg-gym-card border border-gym-border rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative overflow-hidden">
+    <!-- Accent glow -->
+    <div id="modal-accent-glow" class="absolute -right-16 -top-16 w-32 h-32 rounded-full bg-accent-lime/10 blur-2xl"></div>
+    
+    <div class="flex flex-col gap-4 relative z-10">
+      <div class="flex items-center gap-3">
+        <div id="modal-icon-bg" class="w-12 h-12 rounded-xl bg-accent-lime/10 flex items-center justify-center text-2xl">
+          <span id="modal-icon">⚠️</span>
+        </div>
+        <div>
+          <h3 id="modal-title" class="font-display font-bold text-xl text-white">Are you sure?</h3>
+          <p id="modal-subtitle" class="text-xs font-mono text-accent-lime uppercase tracking-wider">Destructive Action</p>
+        </div>
+      </div>
+      
+      <p id="modal-description" class="text-gym-muted text-sm leading-relaxed">
+        This action cannot be undone. Please confirm you want to proceed.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-3 mt-4">
+        <button id="modal-cancel-btn" class="flex-1 py-3 text-sm font-semibold text-white bg-gym-dark border border-gym-border hover:border-gym-border-strong rounded-xl transition-all cursor-pointer">
+          Cancel
+        </button>
+        <button id="modal-confirm-btn" class="flex-1 py-3 text-sm font-semibold text-gym-dark bg-accent-lime hover:bg-accent-lime-hover rounded-xl transition-all shadow-[0_0_15px_rgba(163,230,53,0.2)] cursor-pointer">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-out forwards;
+  }
+</style>

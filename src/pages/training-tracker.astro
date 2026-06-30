@@ -1,0 +1,1016 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Gym Training Tracker - Track Workouts, Streaks & Recovery | GymForge"
+  description="Free gym workout tracker with streaks, recovery tracking, workout splits, and exercise recommendations. Stay consistent with GymForge."
+  canonical="https://gymforge.online/training-tracker"
+>
+  <section class="px-4 sm:px-8 py-12 max-w-5xl mx-auto w-full">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+      <div class="flex flex-col gap-3">
+        <span class="font-mono text-xs uppercase tracking-wider text-accent-lime font-medium">Performance Tracking</span>
+        <h1 class="font-display font-bold text-3xl md:text-5xl text-white tracking-tight">
+          Training Tracker<span class="text-accent-lime">.</span>
+        </h1>
+        <p class="text-gym-muted leading-relaxed max-w-2xl">
+          Manage your workout splits and stay consistent with our lightweight, local-first tracker.
+        </p>
+      </div>
+      
+      <a href="/training-tracker/profile" class="flex items-center gap-3 px-4 py-2 rounded-xl border border-gym-border bg-gym-card hover:border-accent-lime/50 text-white transition-all group shrink-0">
+        <div class="flex flex-col items-end">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-gym-muted">Current Rank</span>
+          <span class="text-xs font-bold text-accent-lime" id="header-rank-name">Bronze</span>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-accent-lime/10 flex items-center justify-center text-accent-lime group-hover:scale-110 transition-transform relative overflow-hidden">
+          <div id="header-rank-icon">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Left Column: Today & Log -->
+      <div class="lg:col-span-2 space-y-8">
+        <!-- Today's Workout Card -->
+        <div class="glass-panel rounded-3xl p-6 md:p-8 relative overflow-hidden">
+          <div class="absolute -right-16 -top-16 w-32 h-32 rounded-full bg-accent-lime/5 blur-2xl"></div>
+          
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="flex-grow">
+              <h2 class="text-xs font-mono uppercase tracking-widest text-accent-lime mb-2">Today's Session</h2>
+              <div id="today-workout-display">
+                <h3 class="font-display font-bold text-2xl md:text-3xl text-white" id="today-workout-name">Rest Day</h3>
+                <p class="text-gym-muted mt-1" id="today-body-parts">Time to recover and grow.</p>
+              </div>
+              
+              <!-- Smart Readiness Info -->
+              <div id="readiness-alert" class="mt-4 flex items-center gap-2 px-3 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider hidden">
+                <span id="readiness-icon">🟢</span>
+                <span id="readiness-text">Fully Recovered</span>
+              </div>
+
+              <div class="flex items-center gap-2 mt-4">
+                <span class="text-xs font-medium text-gym-muted px-2 py-1 rounded border border-gym-border bg-gym-dark/50" id="current-split-name">No Split Selected</span>
+              </div>
+            </div>
+
+            <button 
+              id="log-workout-btn"
+              class="px-8 py-4 font-semibold text-gym-dark bg-accent-lime hover:bg-accent-lime-hover rounded-2xl transition-all hover:scale-[1.02] shadow-[0_0_20px_rgba(163,230,53,0.2)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2 shrink-0"
+            >
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Mark Completed
+            </button>
+          </div>
+        </div>
+
+        <!-- Exercise Recommendations -->
+        <div id="recommendations-card" class="glass-panel rounded-3xl p-6 md:p-8 hidden">
+          <h2 class="font-display font-bold text-xl text-white mb-6 flex items-center gap-2">
+            <svg class="w-5 h-5 text-accent-lime" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Recommended Exercises
+          </h2>
+          <div id="exercises-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Exercises will be injected here -->
+          </div>
+        </div>
+
+        <!-- Split Setup -->
+        <div class="glass-panel rounded-3xl p-6 md:p-8">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="font-display font-bold text-xl text-white">Split Setup</h2>
+            <div id="save-status" class="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-accent-lime opacity-0 transition-opacity duration-300">
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Changes Saved
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-8">
+            <button class="split-preset-btn p-3 rounded-xl border border-gym-border bg-gym-dark hover:border-accent-lime/50 text-xs font-medium transition-all text-center" data-split="bro">Bro Split</button>
+            <button class="split-preset-btn p-3 rounded-xl border border-gym-border bg-gym-dark hover:border-accent-lime/50 text-xs font-medium transition-all text-center" data-split="ppl">Push Pull Legs</button>
+            <button class="split-preset-btn p-3 rounded-xl border border-gym-border bg-gym-dark hover:border-accent-lime/50 text-xs font-medium transition-all text-center" data-split="ul">Upper Lower</button>
+            <button class="split-preset-btn p-3 rounded-xl border border-gym-border bg-gym-dark hover:border-accent-lime/50 text-xs font-medium transition-all text-center" data-split="fb">Full Body</button>
+            <button class="split-preset-btn p-3 rounded-xl border border-gym-border bg-gym-dark hover:border-accent-lime/50 text-xs font-medium transition-all text-center" data-split="custom">Custom Split</button>
+          </div>
+
+          <!-- Custom Split Configurator (Hidden by default) -->
+          <div id="custom-split-config" class="hidden space-y-4 border-t border-gym-border pt-6 mt-6">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Configure Custom Split</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="custom-days-container">
+              <!-- Days will be injected here -->
+            </div>
+          </div>
+
+          <!-- Save Button Footer -->
+          <div class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gym-border pt-8">
+            <p class="text-xs text-gym-muted">Your training schedule is persisted locally on this device.</p>
+            <button 
+              id="save-split-btn"
+              class="w-full sm:w-auto px-10 py-4 font-bold text-gym-dark bg-accent-lime hover:bg-accent-lime-hover rounded-2xl transition-all hover:scale-[1.02] shadow-[0_0_20px_rgba(163,230,53,0.3)] flex items-center justify-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+              </svg>
+              Save Split Configuration
+            </button>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="mt-12 pt-8 border-t border-red-500/20">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div class="flex flex-col gap-1">
+                <h3 class="text-sm font-bold text-red-500/80 uppercase tracking-widest">Danger Zone</h3>
+                <p class="text-[10px] text-gym-muted leading-relaxed">Permanently delete all workout history, rank progress, and split settings. This action cannot be undone.</p>
+              </div>
+              <button 
+                id="reset-data-btn"
+                class="w-full sm:w-auto px-6 py-3 text-xs font-bold text-red-400 border border-red-500/30 hover:bg-red-500/10 rounded-xl transition-all flex items-center justify-center gap-2 shrink-0 group"
+              >
+                <svg class="w-4 h-4 group-hover:animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Reset All Data
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Stats -->
+      <div class="space-y-8">
+        <!-- Muscle Recovery Dashboard -->
+        <div class="glass-panel rounded-3xl p-6">
+          <h2 class="font-display font-bold text-lg text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-accent-lime" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Recovery Intelligence
+          </h2>
+          <div id="recovery-dashboard" class="space-y-3">
+            <!-- Recovery items injected here -->
+          </div>
+        </div>
+
+        <!-- Streak Card -->
+        <div class="glass-panel rounded-3xl p-8 relative overflow-hidden group">
+          <div class="absolute -left-12 -bottom-12 w-24 h-24 rounded-full bg-accent-lime/5 blur-xl group-hover:bg-accent-lime/10 transition-colors"></div>
+          
+          <div class="flex flex-col items-center text-center">
+            <div class="w-16 h-16 rounded-2xl bg-accent-lime/10 border border-accent-lime/20 flex items-center justify-center text-accent-lime mb-4 shadow-[0_0_15px_rgba(163,230,53,0.1)]">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            
+            <div class="flex gap-8">
+              <div>
+                <span class="block text-4xl font-display font-extrabold text-white" id="current-streak">0</span>
+                <span class="text-xs font-mono uppercase tracking-widest text-gym-muted">Current Streak</span>
+              </div>
+              <div class="w-[1px] bg-gym-border h-full"></div>
+              <div>
+                <span class="block text-4xl font-display font-extrabold text-white" id="best-streak">0</span>
+                <span class="text-xs font-mono uppercase tracking-widest text-gym-muted">Best Streak</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Completion Log -->
+        <div class="glass-panel rounded-3xl p-6">
+          <h2 class="font-display font-bold text-lg text-white mb-4">Recent Workouts</h2>
+          <div id="completion-list" class="space-y-3">
+            <p class="text-sm text-gym-muted italic">No workouts logged yet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEO Content Section -->
+  <section class="px-4 sm:px-8 py-16 max-w-5xl mx-auto w-full">
+    <div class="glass-panel rounded-3xl p-8 md:p-12">
+      <h2 class="font-display font-bold text-2xl md:text-3xl text-white tracking-tight mb-8">
+        Gym Training Tracker – Track Workouts, Streaks & Recovery<span class="text-accent-lime">.</span>
+      </h2>
+
+      <div class="space-y-6 text-gym-muted leading-relaxed text-sm md:text-base">
+        <p>
+          A <strong class="text-white">gym training tracker</strong> is the backbone of consistent progress in the weight room. Without one, you are guessing at weights, guessing at volume, and guessing at recovery. The GymForge Training Tracker removes that uncertainty by giving you a clean, fast, and local-first <strong class="text-white">workout tracker</strong> that lives right in your browser. No sign-ups, no cloud sync fees, no clutter — just your training data, stored privately on your device.
+        </p>
+
+        <p>
+          Whether you follow a <strong class="text-white">push pull legs tracker</strong> split, an upper-lower rotation, or a classic bro split, the tracker adapts to your schedule. Choose from built-in presets like Push Pull Legs, Upper Lower, Bro Split, and Full Body — or build a completely custom split that matches your availability and goals. A <strong class="text-white">workout split tracker</strong> like this keeps you accountable by showing you exactly what muscle groups are on the menu today and which exercises target them.
+        </p>
+
+        <p>
+          Consistency is the single greatest predictor of results. Research consistently shows that lifters who train regularly — even at moderate intensity — outperform those who train sporadically at high intensity. That is where a <strong class="text-white">gym workout planner</strong> with built-in streak tracking becomes invaluable. The GymForge <strong class="text-white">workout streak tracker</strong> counts consecutive training days, celebrates personal bests, and creates a visual record of your dedication. Watching your streak climb from 3 to 7 to 14 days builds momentum that is hard to break.
+        </p>
+
+        <p>
+          But training hard is only half the equation. Recovery is where muscle actually grows. The <strong class="text-white">muscle recovery tracker</strong> built into GymForge monitors each muscle group and tells you when it is ready to be trained again. If your chest is still sore from yesterday, the recovery dashboard flags it and suggests alternative muscle groups that are fresh and ready. This smart readiness system prevents overtraining and keeps you progressing week after week.
+        </p>
+
+        <p>
+          For beginners, the tracker removes the overwhelm of starting. Pick a preset split, follow the daily recommendations, and let the XP system gamify your journey from Bronze to Legend. For advanced lifters, the custom split configurator and recovery intelligence give you the granular control you need to optimize every training session. The <strong class="text-white">free gym tracker</strong> scales with your experience — it is as simple or as detailed as you make it.
+        </p>
+
+        <p>
+          Every workout you log earns XP and moves you up the rank ladder. From Bronze all the way to Legend, the rank system provides a long-term motivation structure that traditional trackers simply do not offer. Your rank, streak, and workout history are all persisted locally — meaning your data stays on your device, private and secure. No accounts, no subscriptions, no data harvesting.
+        </p>
+
+        <p>
+          The GymForge <strong class="text-white">gym training tracker</strong> is built for lifters who want results without the bloat. It is fast, responsive, and designed to get out of your way so you can focus on what matters: showing up, training hard, and recovering smart. Start tracking your workouts today and see why thousands of lifters trust GymForge to keep them consistent.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="px-4 sm:px-8 pb-16 max-w-5xl mx-auto w-full">
+    <div class="glass-panel rounded-3xl p-8 md:p-12">
+      <h2 class="font-display font-bold text-2xl md:text-3xl text-white tracking-tight mb-2">
+        Frequently Asked Questions<span class="text-accent-lime">.</span>
+      </h2>
+      <p class="text-gym-muted text-sm mb-10">Everything you need to know about the GymForge Training Tracker.</p>
+
+      <div class="space-y-4" id="faq-container">
+        <div class="faq-item border border-gym-border rounded-2xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gym-dark/30 transition-colors" onclick="toggleFaq(this)">
+            <span class="font-medium text-white text-sm md:text-base pr-4">What is a gym training tracker?</span>
+            <svg class="faq-icon w-5 h-5 text-gym-muted shrink-0 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="faq-answer hidden px-5 pb-5 text-gym-muted text-sm leading-relaxed">
+            A gym training tracker is a tool that helps you log workouts, monitor progress, and stay consistent with your training schedule. The GymForge Training Tracker goes further by including workout split management, streak tracking, muscle recovery intelligence, and an XP-based rank system — all stored locally on your device.
+          </div>
+        </div>
+
+        <div class="faq-item border border-gym-border rounded-2xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gym-dark/30 transition-colors" onclick="toggleFaq(this)">
+            <span class="font-medium text-white text-sm md:text-base pr-4">How do workout streaks work?</span>
+            <svg class="faq-icon w-5 h-5 text-gym-muted shrink-0 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="faq-answer hidden px-5 pb-5 text-gym-muted text-sm leading-relaxed">
+            Workout streaks count consecutive days where you log a completed training session. When you mark a workout as done, the streak counter increments. If you miss a day, the streak resets to zero. The tracker also records your all-time best streak so you always have a personal record to chase.
+          </div>
+        </div>
+
+        <div class="faq-item border border-gym-border rounded-2xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gym-dark/30 transition-colors" onclick="toggleFaq(this)">
+            <span class="font-medium text-white text-sm md:text-base pr-4">Can I create a custom workout split?</span>
+            <svg class="faq-icon w-5 h-5 text-gym-muted shrink-0 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="faq-answer hidden px-5 pb-5 text-gym-muted text-sm leading-relaxed">
+            Yes. In addition to preset splits like Push Pull Legs, Upper Lower, Bro Split, and Full Body, the tracker includes a Custom Split option. You can assign specific muscle groups to each day of the week, mix multiple groups on the same day, and save your configuration with one click.
+          </div>
+        </div>
+
+        <div class="faq-item border border-gym-border rounded-2xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gym-dark/30 transition-colors" onclick="toggleFaq(this)">
+            <span class="font-medium text-white text-sm md:text-base pr-4">Does the tracker save my progress?</span>
+            <svg class="faq-icon w-5 h-5 text-gym-muted shrink-0 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="faq-answer hidden px-5 pb-5 text-gym-muted text-sm leading-relaxed">
+            All data is saved locally in your browser using localStorage. This includes your workout logs, split configuration, XP, rank, streak history, and recovery data. Nothing is sent to a server, so your training history stays completely private. You can reset all data at any time from the Danger Zone section.
+          </div>
+        </div>
+
+        <div class="faq-item border border-gym-border rounded-2xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gym-dark/30 transition-colors" onclick="toggleFaq(this)">
+            <span class="font-medium text-white text-sm md:text-base pr-4">Is this workout tracker free?</span>
+            <svg class="faq-icon w-5 h-5 text-gym-muted shrink-0 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="faq-answer hidden px-5 pb-5 text-gym-muted text-sm leading-relaxed">
+            Yes, the GymForge Training Tracker is completely free. There are no premium tiers, no hidden costs, and no accounts required. Every feature — including splits, streaks, recovery tracking, exercise recommendations, and the rank system — is available from day one.
+          </div>
+        </div>
+
+        <div class="faq-item border border-gym-border rounded-2xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gym-dark/30 transition-colors" onclick="toggleFaq(this)">
+            <span class="font-medium text-white text-sm md:text-base pr-4">Can beginners use this tracker?</span>
+            <svg class="faq-icon w-5 h-5 text-gym-muted shrink-0 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="faq-answer hidden px-5 pb-5 text-gym-muted text-sm leading-relaxed">
+            Absolutely. Beginners can select a preset split like Push Pull Legs or Full Body and immediately see today's workout with recommended exercises. The XP and rank system gamifies the experience, making it easier to stay motivated during the critical first months of training. As you progress, you can switch to custom splits for more control.
+          </div>
+        </div>
+
+        <div class="faq-item border border-gym-border rounded-2xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gym-dark/30 transition-colors" onclick="toggleFaq(this)">
+            <span class="font-medium text-white text-sm md:text-base pr-4">How does recovery tracking work?</span>
+            <svg class="faq-icon w-5 h-5 text-gym-muted shrink-0 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="faq-answer hidden px-5 pb-5 text-gym-muted text-sm leading-relaxed">
+            When you log a workout, the tracker records which muscle groups were trained and timestamps them. A 48-hour recovery window is applied to each muscle group. The Recovery Intelligence dashboard shows which muscles are still recovering and which are ready. If a muscle group is not fully recovered, the readiness alert suggests alternative groups to train instead.
+          </div>
+        </div>
+
+        <div class="faq-item border border-gym-border rounded-2xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left hover:bg-gym-dark/30 transition-colors" onclick="toggleFaq(this)">
+            <span class="font-medium text-white text-sm md:text-base pr-4">What is the best workout split for muscle growth?</span>
+            <svg class="faq-icon w-5 h-5 text-gym-muted shrink-0 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div class="faq-answer hidden px-5 pb-5 text-gym-muted text-sm leading-relaxed">
+            The best split depends on your schedule and recovery capacity. Push Pull Legs (PPL) is popular for its balanced frequency — hitting each muscle group twice per week. Upper Lower splits work well for 4-day schedules. Full Body splits are ideal for beginners or those training 3 days per week. The GymForge tracker lets you experiment with all of them and track which approach delivers the best results for you.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Structured Data (JSON-LD) -->
+  <script is:inline type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a gym training tracker?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A gym training tracker is a tool that helps you log workouts, monitor progress, and stay consistent with your training schedule. The GymForge Training Tracker goes further by including workout split management, streak tracking, muscle recovery intelligence, and an XP-based rank system — all stored locally on your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do workout streaks work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Workout streaks count consecutive days where you log a completed training session. When you mark a workout as done, the streak counter increments. If you miss a day, the streak resets to zero. The tracker also records your all-time best streak so you always have a personal record to chase."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I create a custom workout split?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. In addition to preset splits like Push Pull Legs, Upper Lower, Bro Split, and Full Body, the tracker includes a Custom Split option. You can assign specific muscle groups to each day of the week, mix multiple groups on the same day, and save your configuration with one click."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the tracker save my progress?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "All data is saved locally in your browser using localStorage. This includes your workout logs, split configuration, XP, rank, streak history, and recovery data. Nothing is sent to a server, so your training history stays completely private. You can reset all data at any time from the Danger Zone section."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this workout tracker free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the GymForge Training Tracker is completely free. There are no premium tiers, no hidden costs, and no accounts required. Every feature — including splits, streaks, recovery tracking, exercise recommendations, and the rank system — is available from day one."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can beginners use this tracker?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely. Beginners can select a preset split like Push Pull Legs or Full Body and immediately see today's workout with recommended exercises. The XP and rank system gamifies the experience, making it easier to stay motivated during the critical first months of training. As you progress, you can switch to custom splits for more control."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does recovery tracking work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "When you log a workout, the tracker records which muscle groups were trained and timestamps them. A 48-hour recovery window is applied to each muscle group. The Recovery Intelligence dashboard shows which muscles are still recovering and which are ready. If a muscle group is not fully recovered, the readiness alert suggests alternative groups to train instead."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the best workout split for muscle growth?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The best split depends on your schedule and recovery capacity. Push Pull Legs (PPL) is popular for its balanced frequency — hitting each muscle group twice per week. Upper Lower splits work well for 4-day schedules. Full Body splits are ideal for beginners or those training 3 days per week. The GymForge tracker lets you experiment with all of them and track which approach delivers the best results for you."
+          }
+        }
+      ]
+    }
+  </script>
+
+  <script is:inline>
+    // Constants
+    const BODY_PARTS = ['Chest', 'Back', 'Legs', 'Shoulders', 'Biceps', 'Triceps', 'Abs', 'Cardio', 'Rest'];
+    const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    
+    const EXERCISES = {
+      'Chest': ['Bench Press', 'Incline Dumbbell Press', 'Cable Fly', 'Push Ups'],
+      'Back': ['Pull Ups', 'Barbell Row', 'Lat Pulldown', 'Seated Cable Row'],
+      'Shoulders': ['Overhead Press', 'Lateral Raise', 'Rear Delt Fly'],
+      'Biceps': ['Barbell Curl', 'Hammer Curl', 'Preacher Curl'],
+      'Triceps': ['Rope Pushdown', 'Skull Crushers', 'Overhead Extension'],
+      'Legs': ['Squat', 'Leg Press', 'Romanian Deadlift', 'Leg Extension'],
+      'Abs': ['Crunches', 'Hanging Leg Raise', 'Cable Crunch'],
+      'Full Body': ['Squat', 'Bench Press', 'Barbell Row', 'Overhead Press'],
+      'Arms': ['Barbell Curl', 'Skull Crushers', 'Hammer Curl', 'Rope Pushdown']
+    };
+
+    const PRESETS = {
+      bro: {
+        name: 'Bro Split',
+        schedule: {
+          'Monday': ['Chest'],
+          'Tuesday': ['Back'],
+          'Wednesday': ['Legs'],
+          'Thursday': ['Shoulders'],
+          'Friday': ['Arms'],
+          'Saturday': ['Rest'],
+          'Sunday': ['Rest']
+        }
+      },
+      ppl: {
+        name: 'Push Pull Legs',
+        schedule: {
+          'Monday': ['Chest', 'Shoulders', 'Triceps'],
+          'Tuesday': ['Back', 'Biceps'],
+          'Wednesday': ['Legs'],
+          'Thursday': ['Chest', 'Shoulders', 'Triceps'],
+          'Friday': ['Back', 'Biceps'],
+          'Saturday': ['Legs'],
+          'Sunday': ['Rest']
+        }
+      },
+      ul: {
+        name: 'Upper Lower',
+        schedule: {
+          'Monday': ['Chest', 'Back', 'Shoulders', 'Arms'],
+          'Tuesday': ['Legs', 'Abs'],
+          'Wednesday': ['Rest'],
+          'Thursday': ['Chest', 'Back', 'Shoulders', 'Arms'],
+          'Friday': ['Legs', 'Abs'],
+          'Saturday': ['Rest'],
+          'Sunday': ['Rest']
+        }
+      },
+      fb: {
+        name: 'Full Body',
+        schedule: {
+          'Monday': ['Full Body'],
+          'Tuesday': ['Rest'],
+          'Wednesday': ['Full Body'],
+          'Thursday': ['Rest'],
+          'Friday': ['Full Body'],
+          'Saturday': ['Rest'],
+          'Sunday': ['Rest']
+        }
+      }
+    };
+
+    // State
+    let state = {
+      splitType: 'none',
+      customSchedule: {},
+      logs: [], // Array of objects { date, bodyParts, xp }
+      xp: 0,
+      profile: {
+        username: 'Aesthetic Lifter',
+        joinDate: new Date().toISOString()
+      },
+      lastTrained: {} // { 'Chest': 'ISO DATE' }
+    };
+
+    const RANKS = [
+      { name: 'Bronze', minXp: 0, color: '#a1a1aa' },
+      { name: 'Silver', minXp: 500, color: '#e4e4e7' },
+      { name: 'Gold', minXp: 1500, color: '#fbbf24' },
+      { name: 'Platinum', minXp: 3000, color: '#22d3ee' },
+      { name: 'Diamond', minXp: 5000, color: '#3b82f6' },
+      { name: 'Crown', minXp: 8000, color: '#a855f7' },
+      { name: 'Ace', minXp: 12000, color: '#ef4444' },
+      { name: 'Conqueror', minXp: 17000, color: '#f97316' },
+      { name: 'Legend', minXp: 23000, color: '#a3e635' }
+    ];
+
+    // DOM Elements
+    const todayWorkoutName = document.getElementById('today-workout-name');
+    const todayBodyParts = document.getElementById('today-body-parts');
+    const currentSplitName = document.getElementById('current-split-name');
+    const logWorkoutBtn = document.getElementById('log-workout-btn');
+    const currentStreakDisplay = document.getElementById('current-streak');
+    const bestStreakDisplay = document.getElementById('best-streak');
+    const completionList = document.getElementById('completion-list');
+    const customSplitConfig = document.getElementById('custom-split-config');
+    const customDaysContainer = document.getElementById('custom-days-container');
+    const splitBtns = document.querySelectorAll('.split-preset-btn');
+    const headerRankName = document.getElementById('header-rank-name');
+    const headerRankIcon = document.getElementById('header-rank-icon');
+    const saveStatus = document.getElementById('save-status');
+    const saveSplitBtn = document.getElementById('save-split-btn');
+    const resetDataBtn = document.getElementById('reset-data-btn');
+    
+    // New Elements
+    const recommendationsCard = document.getElementById('recommendations-card');
+    const exercisesList = document.getElementById('exercises-list');
+    const recoveryDashboard = document.getElementById('recovery-dashboard');
+    const readinessAlert = document.getElementById('readiness-alert');
+    const readinessIcon = document.getElementById('readiness-icon');
+    const readinessText = document.getElementById('readiness-text');
+
+    // Initialize
+    function init() {
+      const saved = localStorage.getItem('gymforge_training_tracker');
+      if (saved) {
+        state = JSON.parse(saved);
+        // Migrations
+        if (state.xp === undefined) state.xp = 0;
+        if (!state.profile) state.profile = { username: 'Aesthetic Lifter', joinDate: new Date().toISOString() };
+        if (!state.lastTrained) state.lastTrained = {};
+        
+        // Migrate old logs if needed
+        if (state.logs.length > 0 && typeof state.logs[0] === 'string') {
+          state.logs = state.logs.map(date => ({ date, bodyParts: ['Training Session'], xp: 100 }));
+          save();
+        }
+      } else {
+        // Default custom schedule
+        DAYS.forEach(day => {
+          state.customSchedule[day] = ['Rest'];
+        });
+      }
+
+      renderCustomConfig();
+      updateUI();
+      attachEventListeners();
+    }
+
+    function showSaveStatus() {
+      saveStatus.classList.remove('opacity-0');
+      setTimeout(() => {
+        saveStatus.classList.add('opacity-0');
+      }, 2000);
+    }
+
+    function save() {
+      localStorage.setItem('gymforge_training_tracker', JSON.stringify(state));
+      showSaveStatus();
+    }
+
+    function getRank(xp) {
+      for (let i = RANKS.length - 1; i >= 0; i--) {
+        if (xp >= RANKS[i].minXp) return RANKS[i];
+      }
+      return RANKS[0];
+    }
+
+    function updateUI() {
+      const now = new Date();
+      const dayName = DAYS[now.getDay() === 0 ? 6 : now.getDay() - 1];
+      
+      let currentSchedule;
+      let displayName;
+
+      if (state.splitType === 'custom') {
+        currentSchedule = state.customSchedule;
+        displayName = 'Custom Split';
+      } else if (PRESETS[state.splitType]) {
+        currentSchedule = PRESETS[state.splitType].schedule;
+        displayName = PRESETS[state.splitType].name;
+      } else {
+        currentSchedule = null;
+        displayName = 'No Split Selected';
+      }
+
+      currentSplitName.textContent = displayName;
+
+      let parts = [];
+      if (currentSchedule) {
+        parts = currentSchedule[dayName] || ['Rest'];
+        const isRest = parts.includes('Rest');
+        
+        todayWorkoutName.textContent = isRest ? 'Rest Day' : dayName + ' Session';
+        todayBodyParts.textContent = isRest ? 'Time to recover and grow.' : parts.join(' + ');
+        
+        updateIntelligence(parts);
+      } else {
+        todayWorkoutName.textContent = 'Set Your Split';
+        todayBodyParts.textContent = 'Choose a training split below to start tracking.';
+        recommendationsCard.classList.add('hidden');
+        readinessAlert.classList.add('hidden');
+      }
+
+      // Check if already completed today
+      const todayStr = now.toISOString().split('T')[0];
+      const completedToday = state.logs.some(log => log.date.split('T')[0] === todayStr);
+      
+      if (completedToday) {
+        logWorkoutBtn.disabled = true;
+        logWorkoutBtn.textContent = 'Completed Today';
+        logWorkoutBtn.classList.replace('bg-accent-lime', 'bg-zinc-800');
+        logWorkoutBtn.classList.replace('text-gym-dark', 'text-gym-muted');
+      } else {
+        logWorkoutBtn.disabled = false;
+        logWorkoutBtn.textContent = 'Mark Completed';
+        logWorkoutBtn.classList.add('bg-accent-lime');
+        logWorkoutBtn.classList.add('text-gym-dark');
+      }
+
+      const currentRank = getRank(state.xp);
+      headerRankName.textContent = currentRank.name;
+      headerRankName.style.color = currentRank.color;
+      headerRankIcon.style.color = currentRank.color;
+
+      calculateStreaks();
+      renderLogs();
+      renderRecoveryDashboard();
+
+      splitBtns.forEach(btn => {
+        if (btn.dataset.split === state.splitType) {
+          btn.classList.add('border-accent-lime', 'text-accent-lime', 'bg-accent-lime/5');
+        } else {
+          btn.classList.remove('border-accent-lime', 'text-accent-lime', 'bg-accent-lime/5');
+        }
+      });
+
+      if (state.splitType === 'custom') {
+        customSplitConfig.classList.remove('hidden');
+      } else {
+        customSplitConfig.classList.add('hidden');
+      }
+    }
+
+    function updateIntelligence(todayParts) {
+      const isRest = todayParts.includes('Rest');
+      
+      if (isRest) {
+        recommendationsCard.classList.add('hidden');
+        readinessAlert.classList.add('hidden');
+        return;
+      }
+
+      // Exercise Recommendations
+      recommendationsCard.classList.remove('hidden');
+      exercisesList.innerHTML = '';
+      
+      let allExercises = [];
+      todayParts.forEach(part => {
+        if (EXERCISES[part]) {
+          allExercises = [...allExercises, ...EXERCISES[part]];
+        }
+      });
+      
+      // Remove duplicates
+      allExercises = [...new Set(allExercises)];
+
+      if (allExercises.length > 0) {
+        exercisesList.innerHTML = allExercises.map(ex => `
+          <div class="p-4 rounded-xl border border-gym-border bg-gym-dark/40 flex items-center justify-between group hover:border-accent-lime/30 transition-all">
+            <span class="text-white font-medium text-sm group-hover:text-accent-lime transition-colors">${ex}</span>
+            <div class="w-2 h-2 rounded-full bg-accent-lime/20 group-hover:bg-accent-lime transition-colors"></div>
+          </div>
+        `).join('');
+      } else {
+        recommendationsCard.classList.add('hidden');
+      }
+
+      // Smart Readiness
+      readinessAlert.classList.remove('hidden');
+      let status = 'ready';
+      let recoveringMuscles = [];
+      let maxRemaining = 0;
+
+      todayParts.forEach(part => {
+        const recovery = getRecoveryStatus(part);
+        if (recovery.status === 'Recovering') {
+          status = 'warning';
+          recoveringMuscles.push(part);
+          if (recovery.remaining > maxRemaining) maxRemaining = recovery.remaining;
+        }
+      });
+
+      if (status === 'warning') {
+        const partsToTrack = BODY_PARTS.filter(p => p !== 'Rest' && p !== 'Cardio');
+        const readyParts = partsToTrack.filter(p => !todayParts.includes(p) && getRecoveryStatus(p).status === 'Ready');
+        
+        let suggestion = "";
+        if (readyParts.length > 0) {
+          const alternatives = readyParts.slice(0, 2);
+          suggestion = `. Consider training ${alternatives.join(alternatives.length > 1 ? ' or ' : '')} today.`;
+        }
+
+        const totalMinutes = Math.floor(maxRemaining * 60);
+        const h = Math.floor(totalMinutes / 60);
+        const m = totalMinutes % 60;
+        const timeStr = `${h}h ${m}m remaining`;
+
+        readinessAlert.classList.replace('bg-accent-lime/10', 'bg-red-500/10');
+        readinessAlert.classList.replace('text-accent-lime', 'text-red-400');
+        readinessAlert.classList.add('bg-red-500/10', 'text-red-400');
+        readinessIcon.textContent = '🔴';
+        readinessText.textContent = `${recoveringMuscles.join(' & ')} may still be recovering. ${timeStr}${suggestion}`;
+      } else {
+        readinessAlert.classList.replace('bg-red-500/10', 'bg-accent-lime/10');
+        readinessAlert.classList.replace('text-red-400', 'text-accent-lime');
+        readinessAlert.classList.add('bg-accent-lime/10', 'text-accent-lime');
+        readinessIcon.textContent = '🟢';
+        readinessText.textContent = `${todayParts.join(' & ')} is fully recovered and ready to train.`;
+      }
+    }
+
+    const RECOVERY_HOURS = 48;
+
+    function getRecoveryStatus(part) {
+      const lastTrained = state.lastTrained[part];
+      if (!lastTrained) return { status: 'Ready', hours: 999 };
+      
+      const diffHours = (new Date() - new Date(lastTrained)) / (1000 * 60 * 60);
+      
+      if (diffHours < RECOVERY_HOURS) {
+        return { 
+          status: 'Recovering', 
+          hours: diffHours,
+          remaining: RECOVERY_HOURS - diffHours
+        };
+      }
+      return { status: 'Ready', hours: diffHours };
+    }
+
+    function renderRecoveryDashboard() {
+      const partsToTrack = BODY_PARTS.filter(p => p !== 'Rest' && p !== 'Cardio');
+      recoveryDashboard.innerHTML = partsToTrack.map(part => {
+        const recovery = getRecoveryStatus(part);
+        const { status } = recovery;
+        
+        let dotColor = 'bg-accent-lime';
+        let countdownHtml = '';
+
+        if (status === 'Recovering') {
+          dotColor = 'bg-yellow-400 shadow-[0_0_10px_rgba(250,204,21,0.4)]';
+          const totalMinutes = Math.floor(recovery.remaining * 60);
+          const h = Math.floor(totalMinutes / 60);
+          const m = totalMinutes % 60;
+          countdownHtml = `<span class="text-[8px] font-mono text-yellow-400/80 mt-1">${h}h ${m}m remaining</span>`;
+        }
+        
+        return `
+          <div class="flex flex-col p-3 rounded-xl border border-gym-border bg-gym-dark/30 hover:border-gym-border-bright transition-colors">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-white">${part}</span>
+              <div class="flex items-center gap-2">
+                <span class="text-[9px] font-mono uppercase tracking-widest ${status === 'Recovering' ? 'text-yellow-400/70' : 'text-accent-lime/70'}">${status}</span>
+                <div class="w-1.5 h-1.5 rounded-full ${dotColor}"></div>
+              </div>
+            </div>
+            ${countdownHtml}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderCustomConfig() {
+      customDaysContainer.innerHTML = '';
+      DAYS.forEach(day => {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'p-4 rounded-2xl border border-gym-border bg-gym-dark/30';
+        
+        const currentParts = state.customSchedule[day] || ['Rest'];
+        
+        dayDiv.innerHTML = `
+          <div class="flex justify-between items-center mb-3">
+            <span class="text-xs font-bold text-white uppercase tracking-wider">${day}</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            ${BODY_PARTS.map(part => `
+              <button 
+                class="custom-part-btn px-2.5 py-1 rounded-md border border-gym-border text-[10px] font-medium transition-all ${currentParts.includes(part) ? 'bg-accent-lime/10 border-accent-lime/50 text-accent-lime' : 'text-gym-muted hover:text-white'}"
+                data-day="${day}"
+                data-part="${part}"
+              >
+                ${part}
+              </button>
+            `).join('')}
+          </div>
+        `;
+        customDaysContainer.appendChild(dayDiv);
+      });
+
+      document.querySelectorAll('.custom-part-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const { day, part } = btn.dataset;
+          let current = state.customSchedule[day] || [];
+          
+          if (part === 'Rest') {
+            current = ['Rest'];
+          } else {
+            current = current.filter(p => p !== 'Rest');
+            if (current.includes(part)) {
+              current = current.filter(p => p !== part);
+              if (current.length === 0) current = ['Rest'];
+            } else {
+              current.push(part);
+            }
+          }
+          
+          state.customSchedule[day] = current;
+          save();
+          renderCustomConfig();
+          updateUI();
+        });
+      });
+    }
+
+    function calculateStreaks() {
+      if (state.logs.length === 0) {
+        currentStreakDisplay.textContent = '0';
+        bestStreakDisplay.textContent = '0';
+        return;
+      }
+
+      const sortedLogs = [...new Set(state.logs.map(l => l.date.split('T')[0]))].sort((a, b) => new Date(b) - new Date(a));
+      
+      let currentStreak = 0;
+      let bestStreak = 0;
+      let tempStreak = 0;
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      const latestLog = new Date(sortedLogs[0]);
+      latestLog.setHours(0,0,0,0);
+
+      if (latestLog.getTime() >= yesterday.getTime()) {
+        currentStreak = 1;
+        for (let i = 0; i < sortedLogs.length - 1; i++) {
+          const d1 = new Date(sortedLogs[i]);
+          const d2 = new Date(sortedLogs[i+1]);
+          const diff = (d1 - d2) / (1000 * 60 * 60 * 24);
+          if (diff <= 1.5) currentStreak++; else break;
+        }
+      }
+
+      tempStreak = 1;
+      bestStreak = 1;
+      for (let i = 0; i < sortedLogs.length - 1; i++) {
+        const d1 = new Date(sortedLogs[i]);
+        const d2 = new Date(sortedLogs[i+1]);
+        const diff = (d1 - d2) / (1000 * 60 * 60 * 24);
+        if (diff <= 1.5) tempStreak++; else tempStreak = 1;
+        if (tempStreak > bestStreak) bestStreak = tempStreak;
+      }
+
+      currentStreakDisplay.textContent = currentStreak;
+      bestStreakDisplay.textContent = bestStreak;
+    }
+
+    function renderLogs() {
+      if (state.logs.length === 0) {
+        completionList.innerHTML = '<p class="text-sm text-gym-muted italic">No workouts logged yet.</p>';
+        return;
+      }
+
+      const sorted = [...state.logs].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+      completionList.innerHTML = sorted.map((log, index) => {
+        const date = new Date(log.date);
+        let recoveryInfo = '';
+        
+        if (index === 0) {
+          // Check recovery for the most recent log's parts
+          let maxRemaining = 0;
+          log.bodyParts.forEach(part => {
+            const recovery = getRecoveryStatus(part);
+            if (recovery.status === 'Recovering' && recovery.remaining > maxRemaining) {
+              maxRemaining = recovery.remaining;
+            }
+          });
+
+          if (maxRemaining > 0) {
+            const totalMinutes = Math.floor(maxRemaining * 60);
+            const h = Math.floor(totalMinutes / 60);
+            const m = totalMinutes % 60;
+            recoveryInfo = `
+              <div class="mt-2 pt-2 border-t border-gym-border/50 flex items-center justify-between">
+                <span class="text-[8px] font-mono uppercase tracking-widest text-yellow-400/70">Recovery In Progress</span>
+                <span class="text-[8px] font-mono text-yellow-400">${h}h ${m}m left</span>
+              </div>
+            `;
+          } else {
+            recoveryInfo = `
+              <div class="mt-2 pt-2 border-t border-gym-border/50 flex items-center justify-between">
+                <span class="text-[8px] font-mono uppercase tracking-widest text-accent-lime/70">Recovery Complete</span>
+                <div class="w-1.5 h-1.5 rounded-full bg-accent-lime"></div>
+              </div>
+            `;
+          }
+        }
+
+        return `
+          <div class="flex flex-col p-3 rounded-xl border border-gym-border ${index === 0 ? 'bg-accent-lime/5 border-accent-lime/20' : 'bg-gym-card/50'}">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-white">${date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+              <span class="text-[9px] font-mono text-accent-lime bg-accent-lime/10 px-2 py-0.5 rounded">+${log.xp} XP</span>
+            </div>
+            <p class="text-[10px] text-gym-muted">${log.bodyParts.join(' + ')}</p>
+            ${recoveryInfo}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function attachEventListeners() {
+      splitBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.splitType = btn.dataset.split;
+          save();
+          updateUI();
+        });
+      });
+
+      saveSplitBtn.addEventListener('click', () => {
+        save();
+        updateUI();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      logWorkoutBtn.addEventListener('click', () => {
+        const now = new Date();
+        const nowISO = now.toISOString();
+        const dayName = DAYS[now.getDay() === 0 ? 6 : now.getDay() - 1];
+        
+        let currentSchedule;
+        if (state.splitType === 'custom') currentSchedule = state.customSchedule;
+        else if (PRESETS[state.splitType]) currentSchedule = PRESETS[state.splitType].schedule;
+        
+        const todayParts = currentSchedule ? (currentSchedule[dayName] || ['Rest']) : ['Training'];
+        
+        // Update Recovery Intelligence
+        todayParts.forEach(part => {
+          if (part !== 'Rest') state.lastTrained[part] = nowISO;
+        });
+
+        state.logs.push({ 
+          date: nowISO, 
+          bodyParts: todayParts, 
+          xp: 100 
+        });
+        
+        state.xp += 100;
+        save();
+        updateUI();
+      });
+
+      resetDataBtn.addEventListener('click', () => {
+        const confirmed = confirm('Are you absolutely sure you want to reset all data? This will permanently delete your workout history, progress, and split settings. This action cannot be undone.');
+        if (confirmed) {
+          localStorage.removeItem('gymforge_training_tracker');
+          window.location.reload();
+        }
+      });
+    }
+
+    // Run
+    init();
+
+    // FAQ Toggle
+    function toggleFaq(button) {
+      const faqItem = button.parentElement;
+      const answer = faqItem.querySelector('.faq-answer');
+      const icon = faqItem.querySelector('.faq-icon');
+      
+      answer.classList.toggle('hidden');
+      icon.style.transform = answer.classList.contains('hidden') ? '' : 'rotate(180deg)';
+    }
+  </script>
+</Layout>
+
+<style>
+  .glass-panel {
+    background: rgba(24, 24, 27, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(39, 39, 42, 0.8);
+  }
+</style>

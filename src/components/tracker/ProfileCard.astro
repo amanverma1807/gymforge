@@ -1,0 +1,125 @@
+---
+/**
+ * ProfileCard.astro
+ * Dedicated profile section for the Training Tracker.
+ * Displays rank, XP, streaks, and achievements.
+ */
+---
+
+<div class="rounded-2xl border border-gym-border bg-gym-card p-6 sm:p-8 shadow-2xl relative overflow-hidden flex flex-col gap-6 glass-panel">
+  <!-- Ambient backdrop glows -->
+  <div class="absolute -right-24 -top-24 w-48 h-48 rounded-full bg-accent-lime/5 blur-3xl pointer-events-none"></div>
+  <div class="absolute -left-24 -bottom-24 w-48 h-48 rounded-full bg-accent-cyan/5 blur-3xl pointer-events-none"></div>
+
+  <!-- Profile Top Header: Username, Goal & Settings button -->
+  <div class="flex justify-between items-start w-full relative z-10">
+    <div class="flex items-center gap-4">
+      <!-- Avatar Circle -->
+      <div id="profile-avatar" class="w-14 h-14 rounded-full bg-gradient-to-tr from-accent-lime/20 to-accent-cyan/20 border border-gym-border-strong flex items-center justify-center font-display font-extrabold text-xl text-white shadow-[0_0_15px_rgba(163,230,53,0.1)] group-hover:scale-105 transition-transform select-none">
+        A
+      </div>
+      <div class="flex flex-col">
+        <span class="text-xs font-mono text-gym-muted uppercase tracking-wider">Welcome Back</span>
+        <h2 id="profile-username" class="font-display font-black text-2xl text-white tracking-tight leading-tight">Athlete</h2>
+        <span class="text-xs text-accent-lime font-medium mt-0.5">Today's Goal: Complete Your Workout 💪</span>
+      </div>
+    </div>
+    
+    <!-- Settings button with drop menu -->
+    <div class="relative">
+      <button id="profile-settings-btn" class="w-10 h-10 flex items-center justify-center text-gym-muted hover:text-white rounded-xl border border-gym-border hover:border-gym-border-strong bg-gym-dark/50 hover:bg-gym-dark transition-all cursor-pointer" aria-label="Profile Settings">
+        <svg class="w-5 h-5 transition-transform hover:rotate-45" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </button>
+      
+      <!-- Dropdown menu -->
+      <div id="profile-settings-dropdown" class="hidden absolute right-0 top-full mt-2 w-48 rounded-xl border border-gym-border bg-gym-dark py-2 shadow-2xl z-20 animate-slideIn">
+        <button id="dropdown-edit-split" class="w-full text-left px-4 py-2.5 text-xs text-gym-muted hover:text-accent-lime hover:bg-zinc-800/40 transition-colors cursor-pointer font-mono">
+          ⚙️ Edit Split
+        </button>
+        <button id="dropdown-reset-setup" class="w-full text-left px-4 py-2.5 text-xs text-gym-muted hover:text-accent-lime hover:bg-zinc-800/40 transition-colors cursor-pointer font-mono">
+          🔄 Reset Setup
+        </button>
+        <button id="dropdown-full-reset" class="w-full text-left px-4 py-2.5 text-xs text-red-400 hover:text-red-300 hover:bg-red-950/20 transition-colors cursor-pointer font-mono">
+          ⚠️ Full Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rank Showcase Row -->
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center w-full relative z-10 border-t border-gym-border/50 pt-6">
+    <!-- Large Rank Badge (Visual Focus) -->
+    <div class="md:col-span-5 flex flex-col items-center justify-center p-5 rounded-2xl border border-gym-border/85 bg-gym-dark/40 shadow-inner group/badge hover:shadow-[0_0_25px_rgba(163,230,53,0.08)] transition-all select-none relative">
+      <!-- Glow Aura behind Badge -->
+      <div id="rank-badge-glow" class="w-24 h-24 rounded-full bg-accent-lime/10 blur-2xl absolute -z-10 group-hover/badge:scale-125 transition-transform duration-500"></div>
+      
+      <!-- Large Graphic Emblem -->
+      <div id="rank-badge-emblem" class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-accent-lime/10 to-accent-cyan/10 border border-accent-lime/30 flex items-center justify-center text-4xl mb-3 shadow-[0_0_15px_rgba(163,230,53,0.1)] group-hover/badge:scale-110 group-hover/badge:rotate-3 transition-transform duration-300">
+        🟤
+      </div>
+      <span id="rank-badge-name" class="font-display font-black text-xl text-white tracking-tight uppercase">Bronze III</span>
+      <span id="active-program-badge" class="text-[9px] font-mono text-accent-cyan uppercase tracking-widest mt-1 block">Push Pull Legs</span>
+    </div>
+
+    <!-- Stats and Ranks details -->
+    <div class="md:col-span-7 flex flex-col gap-4">
+      <!-- Rank Progress Bar -->
+      <div class="flex flex-col gap-2">
+        <div class="flex justify-between items-center text-xs font-mono">
+          <span class="text-gym-muted">Rank Progression</span>
+          <span id="progress-percent-label" class="text-accent-lime font-bold">0% to Silver III</span>
+        </div>
+        <div class="w-full bg-gym-dark h-2.5 rounded-full overflow-hidden border border-gym-border/60">
+          <div id="progress-xp-bar" class="bg-accent-lime h-full rounded-full transition-all duration-500 shadow-[0_0_10px_#a3e635]" style="width: 0%"></div>
+        </div>
+      </div>
+      
+      <!-- Achievements Section -->
+      <div class="flex flex-col gap-2 mt-1">
+        <span class="text-[10px] font-mono text-gym-muted uppercase tracking-wider">Unlocked Achievements</span>
+        <div class="flex flex-wrap gap-2" id="achievements-row">
+          <!-- Badges populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats Grid -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-gym-border/50 pt-6 relative z-10">
+    <!-- Stat 1 -->
+    <div class="flex items-center gap-3 p-4 rounded-xl bg-gym-dark/50 border border-gym-border hover:border-gym-border-strong transition-all select-none">
+      <span class="text-2xl shrink-0">🔥</span>
+      <div class="flex flex-col">
+        <span class="text-[10px] font-mono text-gym-muted uppercase tracking-wider">Streak</span>
+        <span id="stat-current-streak" class="font-display font-black text-sm text-white">0 Days</span>
+      </div>
+    </div>
+    <!-- Stat 2 -->
+    <div class="flex items-center gap-3 p-4 rounded-xl bg-gym-dark/50 border border-gym-border hover:border-gym-border-strong transition-all select-none">
+      <span class="text-2xl shrink-0">🏋️</span>
+      <div class="flex flex-col">
+        <span class="text-[10px] font-mono text-gym-muted uppercase tracking-wider">Workouts</span>
+        <span id="stat-total-workouts" class="font-display font-black text-sm text-accent-lime glow-lime">0 Lifts</span>
+      </div>
+    </div>
+    <!-- Stat 3 -->
+    <div class="flex items-center gap-3 p-4 rounded-xl bg-gym-dark/50 border border-gym-border hover:border-gym-border-strong transition-all select-none">
+      <span class="text-2xl shrink-0">⭐</span>
+      <div class="flex flex-col">
+        <span class="text-[10px] font-mono text-gym-muted uppercase tracking-wider">XP</span>
+        <span id="stat-xp-count" class="font-display font-black text-sm text-white">0 XP</span>
+      </div>
+    </div>
+    <!-- Stat 4 -->
+    <div class="flex items-center gap-3 p-4 rounded-xl bg-gym-dark/50 border border-gym-border hover:border-gym-border-strong transition-all select-none">
+      <span class="text-2xl shrink-0">🏆</span>
+      <div class="flex flex-col">
+        <span class="text-[10px] font-mono text-gym-muted uppercase tracking-wider">Best Streak</span>
+        <span id="stat-best-streak" class="font-display font-black text-sm text-white">0 Days</span>
+      </div>
+    </div>
+  </div>
+</div>
