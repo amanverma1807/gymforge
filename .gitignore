@@ -22,3 +22,21 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# VS Code
+.vscode/
+
+# Wrangler
+.wrangler/
+
+# AI tool folders
+.agents/
+.aider-desk/
+.claude/
+
+# Local HTML/CSS files (agar sirf testing ke liye hain)
+live_*.html
+layout.css
+
+# Design notes (agar zarurat nahi)
+DESIGN.md
